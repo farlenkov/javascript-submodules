@@ -1,1 +1,1 @@
-# Shared code for Obsidian plugins with Svelte
+# Reusable code for Obsidian plugins build with Svelte

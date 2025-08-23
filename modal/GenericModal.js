@@ -3,19 +3,18 @@ import { mount, unmount } from 'svelte'
 
 export default class GenericModal extends Modal 
 {
-	constructor(appState, ViewClass, nameSpace, modalType) 
+	constructor(appState, ViewClass, classList) 
     {
 		super(appState.app);
         this.appState = appState;
-        this.nameSpace = nameSpace;
-        this.modalType = modalType;
+        this.classList = classList || [];
         this.ViewClass = ViewClass;
 	}
 
 	onOpen() 
     {
-        this.containerEl.classList.add(this.nameSpace);
-        this.containerEl.classList.add(this.nameSpace + '-' + this.modalType);
+        for (var i = 0; i < this.classList.length; i++)
+            this.containerEl.classList.add(this.classList[i]);
 
         this.modelView = mount(this.ViewClass, 
         { 
@@ -32,8 +31,9 @@ export default class GenericModal extends Modal
             delete this.modelView;
 		}
 
-        this.containerEl.classList.remove(this.nameSpace);
-        this.containerEl.classList.remove(this.nameSpace + '-' + this.modalType);
+        for (var i = 0; i < this.classList.length; i++)
+            this.containerEl.classList.remove(this.classList[i]);
+        
 		this.contentEl.empty();
 	}
 }
