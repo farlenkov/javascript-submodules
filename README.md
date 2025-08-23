@@ -1,1 +1,1 @@
-# javascript-submodules
+# Shared code for Obsidian plugins with Svelte
