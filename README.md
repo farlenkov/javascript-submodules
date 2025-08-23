@@ -1,1 +1,1 @@
-# javascript-submodules
+# Shared code to call LLMs from Svelte projects
