@@ -1,1 +1,1 @@
-# javascript-submodules
+# Reusable code for my JS projects
