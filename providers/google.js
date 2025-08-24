@@ -9,6 +9,7 @@ export default class Google extends Provider
 
     constructor(settings)
     {
+        super();
         this.settings = settings;
     }
 

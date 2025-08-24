@@ -9,6 +9,7 @@ export default class Anthropic extends Provider
 
     constructor(settings)
     {
+        super();
         this.settings = settings;
     }
 

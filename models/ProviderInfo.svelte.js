@@ -1,30 +1,40 @@
-import Alibaba      from './alibaba.js';
-import Anthropic    from './anthropic.js';
-import DeepSeek     from './deepseek.js';
-import Google       from './google.js';
-import Groq         from './groq.js';
-import OpenAI       from './openai.js';
-import OpenRouter   from './openrouter.js';
-import SambaNova    from './sambanova.js';
-import xAI          from './xai.js';
+import Alibaba      from '../providers/alibaba.js';
+import Anthropic    from '../providers/anthropic.js';
+import DeepSeek     from '../providers/deepseek.js';
+import Google       from '../providers/google.js';
+import Groq         from '../providers/groq.js';
+import OpenAI       from '../providers/openai.js';
+import OpenRouter   from '../providers/openrouter.js';
+import SambaNova    from '../providers/sambanova.js';
+import xAI          from '../providers/xai.js';
+
+import settings          from '../settings/Settings.svelte.js';
 
 class ProviderInfo
 {
-    List = 
-    [
-        new Alibaba(),
-        new Anthropic(),
-        new DeepSeek(),
-        new Google(),
-        new Groq(),
-        new OpenAI(),
-        new OpenRouter(),
-        new SambaNova(),
-        new xAI()
-    ];
-
     constructor ()
     {
+        this.init();
+    }
+
+    async init()
+    {
+        while (!settings.Data)
+            await new Promise((resolve) => setTimeout(resolve, 1));
+        
+        this.List = 
+        [
+            new Alibaba(settings.Data),
+            new Anthropic(settings.Data),
+            new DeepSeek(settings.Data),
+            new Google(settings.Data),
+            new Groq(settings.Data),
+            new OpenAI(settings.Data),
+            new OpenRouter(settings.Data),
+            new SambaNova(settings.Data),
+            new xAI(settings.Data)
+        ];
+
         this.ById = {};
         this.List.forEach(provider => this.ById[provider.id] = provider);
     }

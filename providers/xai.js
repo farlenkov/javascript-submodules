@@ -9,6 +9,7 @@ export default class xAI extends Provider
 
     constructor(settings)
     {
+        super();
         this.settings = settings;
     }
     

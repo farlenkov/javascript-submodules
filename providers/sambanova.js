@@ -9,6 +9,7 @@ export default class SambaNova extends Provider
 
     constructor(settings)
     {
+        super();
         this.settings = settings;
     }
 

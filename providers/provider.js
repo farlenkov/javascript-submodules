@@ -1,5 +1,10 @@
 export default class Provider
 {
+    constructor()
+    {
+
+    }
+    
     async FetchModels()
     {
         const options = 

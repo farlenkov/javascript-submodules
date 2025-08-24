@@ -10,6 +10,7 @@ export default class Alibaba extends Provider
 
     constructor(settings)
     {
+        super();
         this.settings = settings;
     }
 

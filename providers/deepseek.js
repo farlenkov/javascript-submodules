@@ -9,6 +9,7 @@ export default class DeepSeek extends Provider
 
     constructor(settings)
     {
+        super();
         this.settings = settings;
     }
 
