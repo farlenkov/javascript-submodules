@@ -1,1 +1,1 @@
-# Shared code to call LLMs from Svelte projects
+# Reusable code to call LLMs from Svelte projects
