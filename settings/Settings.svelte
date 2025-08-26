@@ -3,7 +3,7 @@
     import { SquareArrowOutUpRight } from 'lucide-svelte';
 
     import providers from "../models/ProviderInfo.svelte.js"
-    import settings from "../settings/Settings.svelte.js"
+    import settings from "./Settings.svelte.js"
 
 </script>
 
@@ -34,7 +34,7 @@
                             <input 
                                 type="text"
                                 class="inputbox1" 
-                                bind:value={settings[provider.id + "Key"]} 
+                                bind:value={settings.Data[provider.id + "Key"]} 
                                 placeholder="API key for {provider.name}"
                                 onchange={() => settings.Save()} />
                         </div>
