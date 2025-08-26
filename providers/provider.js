@@ -152,4 +152,16 @@ export default class Provider
 
         return result;
     }
+
+    // SPEAK
+
+    GetVoices()
+    {
+        throw "Not implemented";
+    }
+
+    async Speak(model, text)
+    {
+        throw "Not implemented";
+    }
 }

@@ -24,6 +24,20 @@ class AiClient
 
         return { markdowns };
     }
+
+    // SPEAK
+
+    GetVoices(providerId)
+    {
+        const provider = providers.ById[providerId];
+        return provider.GetVoices();
+    }
+
+    async Speak(providerId, modelId, voice, text)
+    {
+        const provider = providers.ById[providerId];
+        await provider.Speak(modelId, voice, text);
+    }
 }
 
 const aiClient = new AiClient();

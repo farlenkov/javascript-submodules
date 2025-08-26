@@ -15,6 +15,9 @@ class ModelInfo
         while (!settings.Data)
             await new Promise((resolve) => setTimeout(resolve, 1));
 
+        while (!providers.List)
+            await new Promise((resolve) => setTimeout(resolve, 1));
+
         providers.List.forEach(provider => 
         {
             let models = settings.GetModels(provider.id);
