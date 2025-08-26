@@ -1,4 +1,5 @@
 import Provider from './provider.js';
+import AudioClip from '../audio/AudioClip.js';
 
 export default class Google extends Provider
 {
@@ -154,14 +155,11 @@ export default class Google extends Provider
     {
         try 
         {
-            // new Notice('Generating speech...');
-
             const response = await this.callTTS(model, voice, text);
             
             if (response && response.audioContent) 
             {
-                await this.playAudio(response.audioContent, response.mimeType);
-                // new Notice('Speech generated successfully');
+                return AudioClip.fromBase64(response.audioContent, response.mimeType);
             } 
             else 
             {
@@ -171,7 +169,6 @@ export default class Google extends Provider
         catch (error) 
         {
             console.error('TTS Error:', error);
-            // new Notice(`TTS Error: ${error.message}`);
         }
     }
 
@@ -232,85 +229,5 @@ export default class Google extends Provider
         }
         
         throw new Error('No audio content found in response');
-    }
-
-    async playAudio(base64AudioData, mimeType) 
-    {
-        try 
-        {
-            const arrayBuffer  = this.base64ToArrayBuffer(base64AudioData);
-            const pcmData = new Int16Array(arrayBuffer); 
-            const wavBlob = this.pcmToWav(pcmData, 24000);
-            const audioUrl = URL.createObjectURL(wavBlob);
-
-            const audio = new Audio(audioUrl);
-            await audio.play();
-
-            audio.onended = () => 
-            {
-                URL.revokeObjectURL(audioUrl);
-            };
-            
-            audio.onerror = (error) => 
-            {
-                console.error('Audio playback error:', error);
-                new Notice('Error playing audio');
-                URL.revokeObjectURL(audioUrl);
-            };
-            
-            await audio.play();
-            
-        } 
-        catch (error) 
-        {
-            console.error('Audio processing error:', error);
-            new Notice('Error processing audio');
-        }
-    }
-
-    base64ToArrayBuffer(base64) 
-    {
-        const binaryString = atob(base64);
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-
-        for (let i = 0; i < len; i++) 
-            bytes[i] = binaryString.charCodeAt(i);
-        
-        return bytes.buffer;
-    }
-
-    pcmToWav(pcmData, sampleRate = 24000) 
-    {
-        const buffer = new ArrayBuffer(44 + pcmData.length * 2);
-        const view = new DataView(buffer);
-
-        // RIFF identifier
-        this.writeString(view, 0, 'RIFF');
-        view.setUint32(4, 36 + pcmData.length * 2, true);
-        this.writeString(view, 8, 'WAVE');
-        this.writeString(view, 12, 'fmt ');
-        view.setUint32(16, 16, true);
-        view.setUint16(20, 1, true); // PCM
-        view.setUint16(22, 1, true); // mono
-        view.setUint32(24, sampleRate, true);
-        view.setUint32(28, sampleRate * 2, true); // byte rate
-        view.setUint16(32, 2, true); // block align
-        view.setUint16(34, 16, true); // bits per sample
-        this.writeString(view, 36, 'data');
-        view.setUint32(40, pcmData.length * 2, true);
-
-        let offset = 44;
-
-        for (let i = 0; i < pcmData.length; i++, offset += 2)
-            view.setInt16(offset, pcmData[i], true);
-        
-        return new Blob([view], { type: "audio/wav" });
-    }
-
-    writeString(view, offset, string) 
-    {
-        for (let i = 0; i < string.length; i++) 
-            view.setUint8(offset + i, string.charCodeAt(i));        
     }
 }

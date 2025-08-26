@@ -36,7 +36,7 @@ class AiClient
     async Speak(providerId, modelId, voice, text)
     {
         const provider = providers.ById[providerId];
-        await provider.Speak(modelId, voice, text);
+        return await provider.Speak(modelId, voice, text);
     }
 }
 
