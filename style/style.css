@@ -1,0 +1,23 @@
+.svelte-llm-model-select
+{
+    overflow-y: hidden;
+    
+
+    .vertical-tab-header,
+    .vertical-tab-content-container
+    {
+        /* padding-top: 3em; */
+    }
+
+    .vertical-tab-header
+    {
+        border-inline-end: 1px solid var(--divider-color);
+    }
+
+    .svelte-llm-model-list-container
+    {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+}

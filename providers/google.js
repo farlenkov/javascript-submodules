@@ -148,7 +148,7 @@ export default class Google extends Provider
             "Vindemiatrix",
             "Sadachbia",
             "Sadaltager",
-            "Sulafat"];
+            "Sulafat"].sort();
     }
 
     async Speak(model, voice, text)
@@ -214,7 +214,6 @@ export default class Google extends Provider
         }
 
         const data = await response.json();
-        console.log("response.json()", data);
         
         if (data.candidates && 
             data.candidates[0] && 
