@@ -1,0 +1,15 @@
+.svelte-obsidian
+{
+    .modal-content
+    {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .modal-close-button
+    {
+        z-index: 1;
+    }
+
+}
