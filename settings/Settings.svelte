@@ -5,6 +5,14 @@
     import providers from "../models/ProviderInfo.svelte.js"
     import settings from "./Settings.svelte.js"
 
+    function getRowCount(value)
+    {
+        if (!value)
+            return 1;
+        else
+            return value.split("\n").length || 1;
+    }
+
 </script>
 
 <div class="vertical-tab-content-container">
@@ -31,12 +39,13 @@
                             <div class="setting-item-description"></div>
                         </div>
                         <div class="setting-item-control">
-                            <input 
+                            <textarea 
                                 type="text"
                                 class="inputbox1" 
+                                rows={getRowCount(settings.Data[provider.id + "Key"])}
                                 bind:value={settings.Data[provider.id + "Key"]} 
                                 placeholder="API key for {provider.name}"
-                                onchange={() => settings.Save()} />
+                                onchange={() => settings.Save()}></textarea>
                         </div>
                     </div>
                 
@@ -59,6 +68,14 @@
         display: flex;
         align-items: center;
         gap: 0.5em;
+    }
+
+    textarea
+    {
+        resize: none; 
+        overflow: hidden; 
+        white-space: nowrap;
+        width: 100%;
     }
 
 </style>

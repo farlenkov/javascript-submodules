@@ -5,6 +5,13 @@ export default class Provider
 
     }
     
+    getKey(type)
+    {
+        const keys = this.settings.Data[`${this.id}Key`].trim().split("\n");
+        const index = this.settings.up(`${this.id}${type}Counter`);
+        return keys[index % keys.length];
+    }
+    
     async FetchModels()
     {
         const options = 

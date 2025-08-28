@@ -48,7 +48,7 @@ export default class OpenRouter extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.settings.openrouterKey
+            "Authorization" : "Bearer " + this.getKey("Text")
         };
     }
 }

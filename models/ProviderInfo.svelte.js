@@ -24,15 +24,15 @@ class ProviderInfo
         
         this.List = 
         [
-            new Alibaba(settings.Data),
-            new Anthropic(settings.Data),
-            new DeepSeek(settings.Data),
-            new Google(settings.Data),
-            new Groq(settings.Data),
-            new OpenAI(settings.Data),
-            new OpenRouter(settings.Data),
-            new SambaNova(settings.Data),
-            new xAI(settings.Data)
+            new Alibaba(settings),
+            new Anthropic(settings),
+            new DeepSeek(settings),
+            new Google(settings),
+            new Groq(settings),
+            new OpenAI(settings),
+            new OpenRouter(settings),
+            new SambaNova(settings),
+            new xAI(settings)
         ];
 
         this.ById = {};

@@ -24,7 +24,7 @@ export default class Groq extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : `Bearer ${this.settings.groqKey}`
+            "Authorization" : `Bearer ${this.getKey("Models")}`
         };
     }
 
@@ -39,7 +39,7 @@ export default class Groq extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.settings.groqKey
+            "Authorization" : "Bearer " + this.getKey("Text")
         };
     }
 }

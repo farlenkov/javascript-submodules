@@ -43,7 +43,7 @@ export default class Alibaba extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.settings.alibabaKey
+            "Authorization" : "Bearer " + this.getKey("Text")
         };
     }
 }

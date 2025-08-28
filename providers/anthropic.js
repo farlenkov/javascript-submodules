@@ -23,8 +23,8 @@ export default class Anthropic extends Provider
     GetFetchHeaders()
     {
         return {
+            "x-api-key" : this.getKey("Models"),
             "content-type" : "application/json",
-            "x-api-key" : this.settings.anthropicKey,
             "anthropic-version" : "2023-06-01"
         };
     }
@@ -40,9 +40,9 @@ export default class Anthropic extends Provider
     GetModelHeaders()
     {
         return {
-            "x-api-key" : this.settings.anthropicKey,
-            "anthropic-version" : "2023-06-01",
+            "x-api-key" : this.getKey("Text"),
             "content-type" : "application/json",
+            "anthropic-version" : "2023-06-01",
             "anthropic-dangerous-direct-browser-access" : "true"
         };
     }

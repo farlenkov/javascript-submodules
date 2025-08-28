@@ -24,7 +24,7 @@ export default class OpenAI extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.settings.openaiKey
+            "Authorization" : "Bearer " + this.getKey("Models")
         };
     }
 
@@ -40,7 +40,7 @@ export default class OpenAI extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.settings.openaiKey
+            "Authorization" : "Bearer " + this.getKey("Text")
         };
     }
 }

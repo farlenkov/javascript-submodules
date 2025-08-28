@@ -15,7 +15,6 @@ class SettingsState
     {
         this.plugin = plugin;
         this.Data = Object.assign({}, DEFAULT_SETTINGS, await plugin.loadData());
-        this.Data.launchCounter++;
         this.Data.version = this.FileVersion;
         this.Save();
     }
@@ -102,6 +101,16 @@ class SettingsState
         {
             return this.Data.recentModels[0];
         }
+    }
+
+    up (counterKey)
+    {
+        const result = this.Data[counterKey]
+            ? this.Data[counterKey] = this.Data[counterKey] + 1
+            : this.Data[counterKey] = 1;
+
+        this.Save();
+        return result;
     }
 }
 

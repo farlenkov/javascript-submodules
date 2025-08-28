@@ -23,7 +23,7 @@ export default class DeepSeek extends Provider
     GetFetchHeaders()
     {
         return {
-            "Authorization" : `Bearer ${this.settings.deepseekKey}`,
+            "Authorization" : "Bearer " + this.getKey("Models"),
             "Accept" : "application/json"
         };
     }
@@ -39,7 +39,7 @@ export default class DeepSeek extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.settings.deepseekKey
+            "Authorization" : "Bearer " + this.getKey("Text")
         };
     }
 }

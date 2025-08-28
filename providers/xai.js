@@ -22,7 +22,7 @@ export default class xAI extends Provider
 
     GetFetchHeaders()
     {
-        return { "Authorization" : `Bearer ${this.settings.xaiKey}` };
+        return { "Authorization" : "Bearer " + this.getKey("Models") };
     }
 
     // https://docs.x.ai/docs/guides/chat
@@ -36,7 +36,7 @@ export default class xAI extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : `Bearer ${this.settings.xaiKey}`
+            "Authorization" : "Bearer " + this.getKey("Text")
         };
     }
 }

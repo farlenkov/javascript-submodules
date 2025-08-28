@@ -18,7 +18,7 @@ export default class Google extends Provider
 
     GetFetchUrl()
     {
-        return `https://generativelanguage.googleapis.com/v1beta/models?key=${this.settings.googleKey}`;
+        return "https://generativelanguage.googleapis.com/v1beta/models?key=" + this.getKey("Models");
     }
 
     GetFetchHeaders()
@@ -59,7 +59,7 @@ export default class Google extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "x-goog-api-key" : this.settings.googleKey
+            "x-goog-api-key" : this.getKey("Text")
         };
     }
 
@@ -202,7 +202,7 @@ export default class Google extends Provider
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-goog-api-key': this.settings.googleKey,
+                'x-goog-api-key': this.getKey("Voice"),
             },
             body: JSON.stringify(requestBody)
         });

@@ -49,7 +49,7 @@ export default class SambaNova extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.settings.sambanovaKey
+            "Authorization" : "Bearer " + this.getKey("Text")
         };
     }
 
