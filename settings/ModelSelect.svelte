@@ -15,7 +15,7 @@
         modelSelectState,
     } = $props();
 
-    let selectedProviderId = $state(modelSelectState.ProviderTab || modelSelectState.ProviderID);
+    let selectedProviderId = $state(/*modelSelectState.ProviderTab ||*/ modelSelectState.ProviderID);
     let selectedProvider = $derived(providers.ById[selectedProviderId]);
     let selectedProviderName = $derived(selectedProvider == null ? selectedProviderId : selectedProvider.name);
     let selectedProviderPrice = $derived(selectedProvider == null ? false : selectedProvider.price);

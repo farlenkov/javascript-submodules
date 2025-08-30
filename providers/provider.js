@@ -146,18 +146,25 @@ export default class Provider
         if (!data?.choices)
             return [""];
 
-        const result = [];
+        let text = "";
+        let reasoning = "";
 
         data.choices.forEach(choice => 
         {
             if (choice.message.reasoning)
-                result.push(choice.message.reasoning);
+                reasoning = choice.message.reasoning;
+            
+            if (choice.message.reasoning_content)
+                reasoning = choice.message.reasoning_content;
 
             if (choice.message.content)
-                result.push(choice.message.content);
+                text = choice.message.content;
         });
 
-        return result;
+        if (reasoning)
+            return [text, reasoning];
+        else
+            return [text];
     }
 
     // SPEAK

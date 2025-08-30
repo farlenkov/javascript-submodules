@@ -111,7 +111,21 @@ export default class Google extends Provider
         if (!data?.candidates?.[0]?.content?.parts)
             return [""];
 
-        return data.candidates[0].content.parts.map(part => part.text);
+        let text = "";
+        let thought = "";
+
+        data.candidates[0].content.parts.forEach(part => 
+        {
+            if (!part.thought)
+                text = part.text;
+            else
+                thought = part.text;
+        });
+
+        if (thought)
+            return [text, thought];
+        else
+            return [text];
     }
 
     // SPEAK
