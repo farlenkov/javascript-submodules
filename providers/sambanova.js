@@ -6,6 +6,7 @@ export default class SambaNova extends Provider
     name = "SambaNova";
     keys = "https://cloud.sambanova.ai/apis";
     models = "https://cloud.sambanova.ai/plans/pricing";
+    temperature = [0, 1, 1];
 
     constructor(settings)
     {

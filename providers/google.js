@@ -7,6 +7,7 @@ export default class Google extends Provider
     name = "Google";
     keys = "https://aistudio.google.com/app/apikey";
     models = "https://ai.google.dev/gemini-api/docs/pricing";
+    temperature = [0, 2, 1]; // generationConfig.temperature
 
     constructor(settings)
     {
@@ -49,6 +50,9 @@ export default class Google extends Provider
 
         return result;
     }
+
+    // https://ai.google.dev/api/generate-content#v1beta.GenerationConfig
+    // https://ai.google.dev/gemini-api/docs/text-generation#system-instructions
 
     GetModelUrl(model)
     {

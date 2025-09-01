@@ -6,6 +6,7 @@ export default class Anthropic extends Provider
     name = "Anthropic";
     keys = "https://console.anthropic.com/account/keys";
     models = "https://docs.anthropic.com/en/docs/about-claude/pricing";
+    temperature = [0, 1, 1];
 
     constructor(settings)
     {
@@ -31,6 +32,7 @@ export default class Anthropic extends Provider
 
     // https://docs.anthropic.com/en/api/getting-started
     // https://docs.anthropic.com/en/api/messages
+    // https://docs.anthropic.com/en/api/messages#body-thinking
 
     GetModelUrl(model)
     {

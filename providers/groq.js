@@ -5,7 +5,8 @@ export default class Groq extends Provider
     id = "groq";
     name = "Groq";
     keys = "https://console.groq.com/keys";
-    models = "";
+    models = "https://console.groq.com/docs/models";
+    temperature = [0, 2, 1];
 
     constructor(settings)
     {

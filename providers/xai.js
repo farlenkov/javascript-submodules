@@ -6,6 +6,7 @@ export default class xAI extends Provider
     name = "xAI";
     keys = "https://console.x.ai/team/default/api-keys";
     models = "https://docs.x.ai/docs/models";
+    temperature = [0, 2, 1];
 
     constructor(settings)
     {

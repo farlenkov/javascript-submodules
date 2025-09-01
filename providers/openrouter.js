@@ -7,6 +7,7 @@ export default class OpenRouter extends Provider
     keys = "https://openrouter.ai/settings/keys";
     models = "https://openrouter.ai/models";
     price = true;
+    temperature = [0, 2, 1];
 
     constructor(settings)
     {

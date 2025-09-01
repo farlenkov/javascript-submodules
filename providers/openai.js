@@ -6,6 +6,7 @@ export default class OpenAI extends Provider
     name = "OpenAI";
     keys = "https://platform.openai.com/api-keys";
     models = "https://platform.openai.com/docs/pricing";
+    temperature = [0, 2, 1];
 
     constructor(settings)
     {
@@ -30,6 +31,7 @@ export default class OpenAI extends Provider
 
     // https://platform.openai.com/docs/guides/text-generation#conversations-and-context
     // https://platform.openai.com/docs/quickstart?language-preference=curl
+    // https://platform.openai.com/docs/api-reference/chat/create#chat_create-temperature
 
     GetModelUrl(model)
     {
