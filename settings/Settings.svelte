@@ -40,7 +40,6 @@
                         </div>
                         <div class="setting-item-control">
                             <textarea 
-                                type="text"
                                 class="inputbox1" 
                                 rows={getRowCount(settings.Data[provider.id + "Key"])}
                                 bind:value={settings.Data[provider.id + "Key"]} 

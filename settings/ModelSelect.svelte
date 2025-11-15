@@ -208,7 +208,7 @@
                             {/if}
 
                             {#if !isSpecial && !hasKey}
-                                <div style="padding: var(--size-4-1) var(--size-4-2);">
+                                <div class="error-message">
                                     You did not provide the API key for <b>{selectedProvider.name}</b>.
                                     <br>
                                     <br>
@@ -221,9 +221,8 @@
                                     <br>
                                     And paste your API key in settings:
                                     <br>
-                                    <div style="display: inline-block;">
+                                    <div class="button-wrapper">
                                         <button 
-                                            style="margin-top: 0.6em;"
                                             onclick={onShowSettings}>
                                             Open Settings
                                         </button>
@@ -231,13 +230,12 @@
                                 </div>
                             {:else}
                                 {#if !isSpecial && !hasModels}
-                                    <div style="padding: var(--size-4-1) var(--size-4-2);">
+                                    <div class="error-message">
                                         List of models for <b>{selectedProvider.name}</b> not downloaded yet.
                                         <br>
-                                        <div style="display: inline-block;">
+                                        <div class="button-wrapper">
 
-                                            <button 
-                                                style="margin-top: 1em;"
+                                            <button                                                 
                                                 disabled={isUpdating}
                                                 onclick={fetchModels}>
                                                 
@@ -251,7 +249,7 @@
                                         </div>
 
                                         {#if errorMessage}
-                                            <error style="margin-top: 1em;">
+                                            <error>
                                                 {errorMessage}
                                                 <button type="button" class="btn-dark" onclick={() => {errorMessage = null}}>
                                                     <XIcon size={24} strokeWidth={2}/>
@@ -341,6 +339,26 @@
     .vertical-tab-header-group
     {
         padding-top: 0;
+    }
+
+    .error-message
+    {
+        padding: var(--size-4-1) var(--size-4-2);
+
+        error
+        {
+            margin-top: 1em;
+        }
+
+        .button-wrapper
+        {
+            display: inline-block;
+
+            button
+            {
+                margin-top: 1em;
+            }
+        }
     }
 
     label-free
