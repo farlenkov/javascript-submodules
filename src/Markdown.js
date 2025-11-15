@@ -8,7 +8,12 @@ const showdownConverter = new showdown.Converter
     tasklists : true
 });
 
-export function mdToHtml(markdown)
+export function mdToHtml(markdown, replaceNewline)
 {
+    if (replaceNewline)
+        markdown = markdown.replace(/\n/g, "<br>");
+    
     return showdownConverter.makeHtml(markdown);
+    // const html = showdownConverter.makeHtml(markdown);
+    // return replaceNewline ? html.replace(/\n/g, "<br>") : html;
 }
