@@ -54,16 +54,16 @@ export default class Google extends Provider
     // https://ai.google.dev/api/generate-content#v1beta.GenerationConfig
     // https://ai.google.dev/gemini-api/docs/text-generation#system-instructions
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return `https://generativelanguage.googleapis.com/v1beta/models/${model.id}:generateContent`;
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "x-goog-api-key" : this.getKey("Text")
+            "x-goog-api-key" : key
         };
     }
 

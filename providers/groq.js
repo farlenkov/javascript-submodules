@@ -31,16 +31,16 @@ export default class Groq extends Provider
 
     // https://console.groq.com/docs/api-reference#chat-create
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://api.groq.com/openai/v1/chat/completions";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Text")
+            "Authorization" : "Bearer " + key
         };
     }
 }

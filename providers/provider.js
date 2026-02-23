@@ -22,7 +22,7 @@ export default class Provider
         };
         
         console.log(`[LLM] FetchModels → ${this.name}`, options);
-        const resp = await requestUrl(options);
+        const resp = await this.CallHttp(options);
         console.log(`[LLM] FetchModels ← ${this.name}`, resp);
 
         const text = await resp.text;
@@ -59,18 +59,19 @@ export default class Provider
         try 
         {
             const body = this.GetModelBody(model, messages);
+            const key = this.getKey("Text");
             
             const options = 
             {
-                url : this.GetModelUrl(model),
+                url : this.GetModelUrl(model, key),
                 throw : false,
                 method: 'POST',
-                headers : this.GetModelHeaders(),
+                headers : this.GetModelHeaders(key),
                 body : JSON.stringify(body)
             };
 
             console.log(`[LLM] CallModel → ${this.name} / ${model.name}`, options);
-            const resp = await requestUrl(options);
+            const resp = await this.CallHttp(options);
             console.log(`[LLM] CallModel ← ${this.name} / ${model.name}`, resp);
             
             const text = await resp.text;
@@ -177,5 +178,32 @@ export default class Provider
     async Speak(model, text)
     {
         throw "Not implemented";
+    }
+
+    // HTTP
+
+    async CallHttp(options)
+    {
+        const relay = this.settings.GetRelay();
+
+        if (!relay)
+        {
+            return await requestUrl(options);
+        }
+        else
+        {
+            const throwOpt = options.throw;
+            delete options.throw;
+
+            const resp = await requestUrl
+            ({
+                url : relay,
+                method : "POST",
+                throw : throwOpt,
+                body : JSON.stringify(options)
+            });
+
+            return resp;
+        }
     }
 }

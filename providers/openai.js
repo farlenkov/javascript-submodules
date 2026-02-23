@@ -33,16 +33,16 @@ export default class OpenAI extends Provider
     // https://platform.openai.com/docs/quickstart?language-preference=curl
     // https://platform.openai.com/docs/api-reference/chat/create#chat_create-temperature
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://api.openai.com/v1/chat/completions";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Text")
+            "Authorization" : "Bearer " + key
         };
     }
 }

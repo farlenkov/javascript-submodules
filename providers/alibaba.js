@@ -35,16 +35,16 @@ export default class Alibaba extends Provider
 
     // https://www.alibabacloud.com/help/en/model-studio/multi-round-conversation
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Text")
+            "Authorization" : "Bearer " + key
         };
     }
 }

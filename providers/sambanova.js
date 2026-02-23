@@ -41,16 +41,16 @@ export default class SambaNova extends Provider
 
     // https://docs.sambanova.ai/cloud/api-reference/endpoints/chat
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://api.sambanova.ai/v1/chat/completions";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Text")
+            "Authorization" : "Bearer " + key
         };
     }
 

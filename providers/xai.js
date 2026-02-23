@@ -28,16 +28,16 @@ export default class xAI extends Provider
 
     // https://docs.x.ai/docs/guides/chat
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://api.x.ai/v1/chat/completions";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Text")
+            "Authorization" : "Bearer " + key
         };
     }
 }

@@ -34,15 +34,15 @@ export default class Anthropic extends Provider
     // https://docs.anthropic.com/en/api/messages
     // https://docs.anthropic.com/en/api/messages#body-thinking
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://api.anthropic.com/v1/messages";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
-            "x-api-key" : this.getKey("Text"),
+            "x-api-key" : key,
             "content-type" : "application/json",
             "anthropic-version" : "2023-06-01",
             "anthropic-dangerous-direct-browser-access" : "true"

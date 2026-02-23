@@ -1,6 +1,6 @@
 const DEFAULT_SETTINGS = 
 {
-    defaultModel : "gemini-2.0-flash",
+    defaultModel : "gemini-3-flash-preview",
     defaultProvider : "google",
     recentModels : [],
     launchCounter : 0
@@ -111,6 +111,11 @@ class SettingsState
 
         this.Save();
         return result;
+    }
+
+    GetRelay ()
+    {
+        return this.Data.relay;
     }
 }
 

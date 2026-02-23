@@ -31,16 +31,16 @@ export default class DeepSeek extends Provider
 
     // https://api-docs.deepseek.com
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://api.deepseek.com/chat/completions";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Text")
+            "Authorization" : "Bearer " + key
         };
     }
 }

@@ -40,16 +40,16 @@ export default class OpenRouter extends Provider
 
     // https://openrouter.ai/docs/quick-start
 
-    GetModelUrl(model)
+    GetModelUrl(model, key)
     {
         return "https://openrouter.ai/api/v1/chat/completions";
     }
 
-    GetModelHeaders()
+    GetModelHeaders(key)
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Text")
+            "Authorization" : "Bearer " + key
         };
     }
 }
