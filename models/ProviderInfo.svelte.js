@@ -8,7 +8,7 @@ import OpenRouter   from '../providers/openrouter.js';
 import SambaNova    from '../providers/sambanova.js';
 import xAI          from '../providers/xai.js';
 
-import settings          from '../settings/Settings.svelte.js';
+import settings     from '../settings/Settings.svelte.js';
 
 class ProviderInfo
 {

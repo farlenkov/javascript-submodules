@@ -99,11 +99,14 @@ export default class Google extends Provider
         {
             contents : messages,
             generationConfig : {},  
-            safetySettings : 
-            [{ 
-                category : "HARM_CATEGORY_SEXUALLY_EXPLICIT", 
-                threshold : "BLOCK_NONE" 
-            }]
+            safetySettings : // https://ai.google.dev/api/generate-content#v1beta.SafetySetting
+            [
+                { category : "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold : "BLOCK_NONE" },
+                { category : "HARM_CATEGORY_DANGEROUS_CONTENT", threshold : "BLOCK_NONE" },
+                { category : "HARM_CATEGORY_CIVIC_INTEGRITY", threshold : "BLOCK_NONE" },
+                { category : "HARM_CATEGORY_HATE_SPEECH", threshold : "BLOCK_NONE" },
+                { category : "HARM_CATEGORY_HARASSMENT", threshold : "BLOCK_NONE" }
+            ]
         };
 
         body.generationConfig.thinkingConfig = { includeThoughts : true };
@@ -111,7 +114,10 @@ export default class Google extends Provider
     }
 
     ReadResponse(data)
-    {            
+    {
+        if (data?.promptFeedback?.blockReason)
+            throw data.promptFeedback.blockReason;
+
         if (!data?.candidates?.[0]?.content?.parts)
             return [""];
 

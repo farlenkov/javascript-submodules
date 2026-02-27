@@ -103,6 +103,8 @@ class SettingsState
         }
     }
 
+    // OTHER
+
     up (counterKey)
     {
         const result = this.Data[counterKey]
