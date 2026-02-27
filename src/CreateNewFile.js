@@ -11,6 +11,10 @@ export async function createNewFile(app, folderPath, baseName, fileExt, content)
         filePath = `${folderPath}/${baseName} ${counter}.${fileExt}`;
     }
 
+    content = typeof content === 'string' 
+        ? content 
+        : JSON.stringify(content, null, '\t');
+
     const file = await app.vault.create(filePath, content);
     const leaf = app.workspace.getLeaf();
     await leaf.openFile(file);
