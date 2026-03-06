@@ -12,7 +12,7 @@ export default class Alibaba extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     // https://www.alibabacloud.com/help/en/model-studio/models

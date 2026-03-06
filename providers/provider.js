@@ -4,12 +4,19 @@ export default class Provider
     {
 
     }
+
+    init (settings)
+    {
+        this.settings = settings;
+        this.settingsLinkLabel = "Get API key for " + this.name;
+        this.settingsInputLabel = "API key for " + this.name;
+    }
     
     getKey(type)
     {
         const keys = this.settings.Data[`${this.id}Key`].trim().split("\n");
         const index = this.settings.up(`${this.id}${type}Counter`);
-        return keys[index % keys.length];
+        return keys[index % keys.length].trim();
     }
     
     async FetchModels()
@@ -95,7 +102,7 @@ export default class Provider
         nodes.forEach(node => 
         {
             node.content.forEach(content => 
-            {    
+            {
                 messages.push(this.ReadMessage(node, content));
             });
         });
@@ -186,7 +193,7 @@ export default class Provider
     {
         const relay = this.settings.GetRelay();
 
-        if (!relay)
+        if (!relay || this.noRelay)
         {
             return await requestUrl(options);
         }

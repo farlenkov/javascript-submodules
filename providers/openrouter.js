@@ -12,7 +12,7 @@ export default class OpenRouter extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     GetFetchUrl()

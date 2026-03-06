@@ -11,7 +11,7 @@ export default class xAI extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
     
     // https://docs.x.ai/docs/api-reference#list-models

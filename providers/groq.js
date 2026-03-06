@@ -11,7 +11,7 @@ export default class Groq extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     // https://console.groq.com/docs/api-reference#models-list

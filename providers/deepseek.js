@@ -11,7 +11,7 @@ export default class DeepSeek extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     // https://api-docs.deepseek.com/api/list-models

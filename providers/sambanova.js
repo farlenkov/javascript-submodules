@@ -11,7 +11,7 @@ export default class SambaNova extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     // https://docs.sambanova.ai/cloud/api-reference/endpoints/model-list

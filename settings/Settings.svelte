@@ -18,9 +18,9 @@
 <div class="vertical-tab-content-container">
     <div class="vertical-tab-content">
         <div class="vertical-tab-header-group">
-            <div class="vertical-tab-header-group-title">
-                API Keys
-            </div>
+            <!-- <div class="vertical-tab-header-group-title">
+                Settings
+            </div> -->
             <div class="vertical-tab-header-group-items">
 
                 {#each providers.List as provider}
@@ -32,7 +32,7 @@
                                 <a 
                                     href="{provider.keys}" 
                                     target="_blank" 
-                                    aria-label="Get API key from {provider.name}">
+                                    aria-label="{provider.settingsLinkLabel}">
                                     <SquareArrowOutUpRight size={16} />
                                 </a>
                             </div>
@@ -43,7 +43,7 @@
                                 class="inputbox1" 
                                 rows={getRowCount(settings.Data[provider.id + "Key"])}
                                 bind:value={settings.Data[provider.id + "Key"]} 
-                                placeholder="API key for {provider.name}"
+                                placeholder="{provider.settingsInputLabel}"
                                 onchange={() => settings.Save()}></textarea>
                         </div>
                     </div>

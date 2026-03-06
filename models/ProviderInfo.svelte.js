@@ -3,6 +3,7 @@ import Anthropic    from '../providers/anthropic.js';
 import DeepSeek     from '../providers/deepseek.js';
 import Google       from '../providers/google.js';
 import Groq         from '../providers/groq.js';
+import Ollama       from '../providers/ollama.js';
 import OpenAI       from '../providers/openai.js';
 import OpenRouter   from '../providers/openrouter.js';
 import SambaNova    from '../providers/sambanova.js';
@@ -29,6 +30,7 @@ class ProviderInfo
             new DeepSeek(settings),
             new Google(settings),
             new Groq(settings),
+            new Ollama(settings),
             new OpenAI(settings),
             new OpenRouter(settings),
             new SambaNova(settings),

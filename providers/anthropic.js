@@ -11,7 +11,7 @@ export default class Anthropic extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     // https://docs.anthropic.com/en/api/models-list

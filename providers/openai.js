@@ -11,7 +11,7 @@ export default class OpenAI extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     // https://platform.openai.com/docs/api-reference/models/list

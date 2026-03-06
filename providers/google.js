@@ -12,7 +12,7 @@ export default class Google extends Provider
     constructor(settings)
     {
         super();
-        this.settings = settings;
+        this.init(settings);
     }
 
     // https://ai.google.dev/api/models#models_list-SHELL
