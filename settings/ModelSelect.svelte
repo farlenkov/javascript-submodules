@@ -209,17 +209,31 @@
 
                             {#if !isSpecial && !hasKey}
                                 <div class="error-message">
-                                    You did not provide the API key for <b>{selectedProvider.name}</b>.
-                                    <br>
-                                    <br>
-                                    You can get API key here:
-                                    <br>
-                                    <a href="{selectedProvider.keys}" target="_blank" title="Get API Key">
-                                        {selectedProvider.keys}
-                                    </a>
-                                    <br>
-                                    <br>
-                                    And paste your API key in settings:
+                                    {#if selectedProvider.isLocal}
+                                        You did not provide base URL for <b>{selectedProvider.name}</b>.
+                                        <br>
+                                        <br>
+                                        You can read quickstart guide here:
+                                        <br>
+                                        <a href="{selectedProvider.keys}" target="_blank" title="Read quickstart guide">
+                                            {selectedProvider.keys}
+                                        </a>
+                                        <br>
+                                        <br>
+                                        And paste your base URL in settings:
+                                    {:else}
+                                        You did not provide the API key for <b>{selectedProvider.name}</b>.
+                                        <br>
+                                        <br>
+                                        You can get API key here:
+                                        <br>
+                                        <a href="{selectedProvider.keys}" target="_blank" title="Get API Key">
+                                            {selectedProvider.keys}
+                                        </a>
+                                        <br>
+                                        <br>
+                                        And paste your API key in settings:
+                                    {/if}
                                     <br>
                                     <div class="button-wrapper">
                                         <button 

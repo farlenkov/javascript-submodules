@@ -193,7 +193,7 @@ export default class Provider
     {
         const relay = this.settings.GetRelay();
 
-        if (!relay || this.noRelay)
+        if (!relay || this.isLocal)
         {
             return await requestUrl(options);
         }

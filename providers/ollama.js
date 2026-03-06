@@ -8,7 +8,7 @@ export default class Ollama extends Provider
     models = "https://ollama.com/search";
     temperature = [0, 2, 1];
 
-    noRelay = true;
+    isLocal = true;
 
     constructor(settings)
     {
