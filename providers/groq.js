@@ -25,8 +25,7 @@ export default class Groq extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : `Bearer ${this.getKey("Models")}`
-        };
+            "Authorization" : `Bearer ${this.getKey("Models")}` };
     }
 
     // https://console.groq.com/docs/api-reference#chat-create
@@ -40,7 +39,6 @@ export default class Groq extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + key
-        };
+            "Authorization" : "Bearer " + key };
     }
 }

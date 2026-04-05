@@ -53,6 +53,7 @@ export default class Google extends Provider
 
     // https://ai.google.dev/api/generate-content#v1beta.GenerationConfig
     // https://ai.google.dev/gemini-api/docs/text-generation#system-instructions
+    // https://ai.google.dev/gemini-api/docs/text-generation#multi-turn-conversations 
 
     GetModelUrl(model, key)
     {
@@ -63,34 +64,31 @@ export default class Google extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "x-goog-api-key" : key
-        };
+            "x-goog-api-key" : key };
     }
 
-    ReadMessages(nodes)
+    ConvertMessages(messages)
     {
-        const messages = [];
+        const result = [];
 
-        nodes.forEach(node => 
+        for (const message of messages)
         {
-            let message = 
-            { 
-                parts : [],
-                role :  node.role == "system" ? "user" : node.role
-            };
-
-            node.content.forEach(content =>
-            {
-                message.parts.push
-                ({
-                    text : node.role == "system" ? `*${content}*` : content
-                }); 
+            result.push
+            ({ 
+                parts : 
+                [{
+                    text : message.role == "system" 
+                        ? `*${message.content}*` 
+                        : message.content
+                }],
+                
+                role : message.role == "system" 
+                    ? "user" 
+                    : message.role
             });
+        }
 
-            messages.push(message);
-        });
-
-        return messages;
+        return result;
     }
 
     GetModelBody(model, messages)
@@ -99,8 +97,10 @@ export default class Google extends Provider
         {
             contents : messages,
             generationConfig : {},  
-            safetySettings : // https://ai.google.dev/api/generate-content#v1beta.SafetySetting
+            safetySettings : 
             [
+                // https://ai.google.dev/api/generate-content#v1beta.SafetySetting
+
                 { category : "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold : "BLOCK_NONE" },
                 { category : "HARM_CATEGORY_DANGEROUS_CONTENT", threshold : "BLOCK_NONE" },
                 { category : "HARM_CATEGORY_CIVIC_INTEGRITY", threshold : "BLOCK_NONE" },
@@ -203,32 +203,24 @@ export default class Google extends Provider
         const requestBody = 
         {
             model : model,
+            contents : [{ parts : [{ text : text }] }],
 
-            contents: [{
-                parts: [{
-                    text: text
-                }]
-            }],
-
-            generationConfig: {
-                responseModalities: ["AUDIO"],
-                speechConfig: {
-                    voiceConfig:{
-                        prebuiltVoiceConfig : {
-                            voiceName: voice
-                        }
-                    }
-                }
+            generationConfig : 
+            {
+                responseModalities: ["AUDIO"],                
+                speechConfig : { voiceConfig : { prebuiltVoiceConfig : { voiceName : voice }}}
             }
         };
 
-        const response = await fetch(url, {
+        const response = await fetch(url, 
+        {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-goog-api-key': this.getKey("Voice"),
-            },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(requestBody),
+            headers : 
+            {
+                'Content-Type' : 'application/json',
+                'x-goog-api-key' : this.getKey("Voice"),
+            }
         });
 
         if (!response.ok) 
@@ -247,8 +239,7 @@ export default class Google extends Provider
 
             return { 
                 audioContent: parts[0].inlineData.data, 
-                mimeType: parts[0].inlineData.mimeType 
-            };
+                mimeType: parts[0].inlineData.mimeType };
         }
         
         throw new Error('No audio content found in response');

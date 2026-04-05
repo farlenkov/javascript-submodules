@@ -34,8 +34,7 @@ export default class OpenRouter extends Provider
             context : model.context_length,
             owner : model.owned_by || this.name,
             prompt : parseFloat(model.pricing.prompt),
-            completion : parseFloat(model.pricing.completion)
-        };
+            completion : parseFloat(model.pricing.completion) };
     }
 
     // https://openrouter.ai/docs/quick-start
@@ -49,7 +48,6 @@ export default class OpenRouter extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + key
-        };
+            "Authorization" : "Bearer " + key };
     }
 }

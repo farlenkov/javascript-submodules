@@ -28,9 +28,7 @@ export default class Ollama extends Provider
 
     GetFetchHeaders()
     {
-        return {
-            "Content-Type" : "application/json"
-        };
+        return { "Content-Type" : "application/json" };
     }
 
     ReadModels(data)
@@ -63,9 +61,7 @@ export default class Ollama extends Provider
 
     GetModelHeaders(key)
     {
-        return {
-            "Content-Type" : "application/json",
-        };
+        return { "Content-Type" : "application/json" };
     }
 
     ReadResponse(data)

@@ -59,9 +59,9 @@ export default class Provider
         };
     }
 
-    async CallModel(model, nodes)
+    async CallModel(model, messages)
     {
-        const messages = this.ReadMessages(nodes);
+        messages = this.ConvertMessages(messages);
 
         try 
         {
@@ -95,27 +95,25 @@ export default class Provider
         }
     }
 
-    ReadMessages(nodes)
+    ConvertMessages(messages)
     {
-        const messages = [];
+        const result = [];
 
-        nodes.forEach(node => 
-        {
-            node.content.forEach(content => 
-            {
-                messages.push(this.ReadMessage(node, content));
-            });
-        });
+        for (const message of messages)
+            result.push(this.ConvertMessage(message));
 
-        return messages;
+        return result;
     }
 
-    ReadMessage(node, content)
+    ConvertMessage(message)
     {
         return { 
-            content : content, 
-            role : node.role === "model" ? "assistant" : node.role
-        };
+
+            content : message.content,
+
+            role : message.role === "model"
+                ? "assistant" 
+                : message.role };
     }
 
     GetModelBody(model, messages)
@@ -123,8 +121,7 @@ export default class Provider
         return {
             model : model.id,
             messages : messages,
-            stream : false
-        };
+            stream : false };
     }
 
     CheckError(data)
@@ -157,7 +154,7 @@ export default class Provider
         let text = "";
         let reasoning = "";
 
-        data.choices.forEach(choice => 
+        for (const choice of data.choices)
         {
             if (choice.message.reasoning)
                 reasoning = choice.message.reasoning;
@@ -167,7 +164,7 @@ export default class Provider
 
             if (choice.message.content)
                 text = choice.message.content;
-        });
+        }
 
         if (reasoning)
             return [text, reasoning];

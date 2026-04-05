@@ -35,8 +35,7 @@ export default class SambaNova extends Provider
             context : model.context_length,
             owner : model.owned_by || this.name,
             prompt : parseFloat(model.pricing.prompt),
-            completion : parseFloat(model.pricing.completion)
-        };
+            completion : parseFloat(model.pricing.completion) };
     }
 
     // https://docs.sambanova.ai/cloud/api-reference/endpoints/chat
@@ -50,8 +49,7 @@ export default class SambaNova extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + key
-        };
+            "Authorization" : "Bearer " + key };
     }
 
     ReadResponse(data)

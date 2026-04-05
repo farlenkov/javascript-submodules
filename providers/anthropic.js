@@ -26,8 +26,7 @@ export default class Anthropic extends Provider
         return {
             "x-api-key" : this.getKey("Models"),
             "content-type" : "application/json",
-            "anthropic-version" : "2023-06-01"
-        };
+            "anthropic-version" : "2023-06-01" };
     }
 
     // https://docs.anthropic.com/en/api/getting-started
@@ -45,8 +44,7 @@ export default class Anthropic extends Provider
             "x-api-key" : key,
             "content-type" : "application/json",
             "anthropic-version" : "2023-06-01",
-            "anthropic-dangerous-direct-browser-access" : "true"
-        };
+            "anthropic-dangerous-direct-browser-access" : "true" };
     }
 
     GetModelBody(model, messages)
@@ -54,8 +52,7 @@ export default class Anthropic extends Provider
         return {
             model : model.id,
             messages : messages,
-            max_tokens : 2048
-        };
+            max_tokens : 2048 * 4 };
     }
 
     ReadResponse(data)

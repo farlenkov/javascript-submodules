@@ -25,8 +25,7 @@ export default class OpenAI extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + this.getKey("Models")
-        };
+            "Authorization" : "Bearer " + this.getKey("Models") };
     }
 
     // https://platform.openai.com/docs/guides/text-generation#conversations-and-context
@@ -42,7 +41,6 @@ export default class OpenAI extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + key
-        };
+            "Authorization" : "Bearer " + key };
     }
 }

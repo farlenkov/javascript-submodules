@@ -25,8 +25,7 @@ export default class DeepSeek extends Provider
     {
         return {
             "Authorization" : "Bearer " + this.getKey("Models"),
-            "Accept" : "application/json"
-        };
+            "Accept" : "application/json" };
     }
 
     // https://api-docs.deepseek.com
@@ -40,7 +39,6 @@ export default class DeepSeek extends Provider
     {
         return {
             "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + key
-        };
+            "Authorization" : "Bearer " + key };
     }
 }
