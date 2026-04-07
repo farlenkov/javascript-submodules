@@ -3,10 +3,12 @@ import { mount, unmount } from 'svelte'
 
 export default class GenericModal extends Modal 
 {
-	constructor(appState, ViewClass, classList) 
+	constructor(ViewClass, props, classList) 
     {
-		super(appState.app);
-        this.appState = appState;
+        const app = props.app || props.appState.app;
+		super(app);
+
+        this.props = props;
         this.classList = classList || [];
         this.ViewClass = ViewClass;
 	}
@@ -19,7 +21,7 @@ export default class GenericModal extends Modal
         this.modelView = mount(this.ViewClass, 
         { 
             target : this.contentEl,
-            props : { appState : this.appState, modal : this }
+            props : { modal : this, ...this.props }
         });
 	}
 	

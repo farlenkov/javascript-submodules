@@ -14,4 +14,7 @@
 
     .hidden { visibility: hidden; }
     .hide { display: none !important; }
+    .dim { filter: brightness(0.5); }
+    .display-contents { display: contents; }
+    .color-text-accent { color:var(--text-accent); }
 }
