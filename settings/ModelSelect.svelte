@@ -12,7 +12,7 @@
     { 
         onModelSelected, 
         onShowSettings, 
-        modelSelectState,
+        modelSelectState
     } = $props();
 
     let selectedProviderId = $state(modelSelectState.ProviderTab || modelSelectState.ProviderID);
@@ -84,194 +84,184 @@
 
 </script>
 
-    <div class="svelte-llm-model-select vertical-tabs-container">
+<div class="svelte-llm-model-select vertical-tabs-container">
 
-        <div class="vertical-tab-header">
-            <div class="vertical-tab-header-group">
-                <div class="vertical-tab-header-group-title">
-                    API Providers
-                </div>
-                <div class="vertical-tab-header-group-items">  
+    <div class="vertical-tab-header">
+        <div class="vertical-tab-header-group">
+            <div class="vertical-tab-header-group-title">
+                API Providers
+            </div>
+            <div class="vertical-tab-header-group-items">  
 
-                    {#each providers.List as provider}
-                        {#if !provider.untested}
+                {#each providers.List as provider}
+                    {#if !provider.untested}
 
-                            <div onclick={()=>{clickProvider(provider.id)}} 
-                                class="vertical-tab-nav-item"                            
-                                class:is-active={provider.id == selectedProviderId}>
-                                {provider.name}
-                            </div>
-
-                        {/if}
-                    {/each}
-
-                </div>
-                
-                <div class="vertical-tab-header-group-title">
-                    Untested
-                </div>
-                <div class="vertical-tab-header-group-items">
-                    
-                    {#each providers.List as provider}
-                        {#if provider.untested}
-
-                            <div onclick={()=>{clickProvider(provider.id)}} 
-                                class="vertical-tab-nav-item"                            
-                                class:is-active={provider.id == selectedProviderId}>
-                                {provider.name}
-                            </div>
-                            
-                        {/if}
-                    {/each}
-
-                </div>
-                
-                <div class="vertical-tab-header-group-title">
-                    Your
-                </div>
-                <div class="vertical-tab-header-group-items">
-                    
-                    <div onclick={()=>{clickProvider(RECENT_TAB)}} 
-                        class="vertical-tab-nav-item"                            
-                        class:is-active={RECENT_TAB == selectedProviderId}>
-                        Resent
-                        <div class="vertical-tab-nav-item-chevron">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-chevron-right">
-                                <path d="m9 18 6-6-6-6"></path>
-                            </svg>
+                        <div onclick={()=>{clickProvider(provider.id)}} 
+                            class="vertical-tab-nav-item"                            
+                            class:is-active={provider.id == selectedProviderId}>
+                            {provider.name}
                         </div>
+
+                    {/if}
+                {/each}
+
+            </div>
+            
+            <div class="vertical-tab-header-group-title">
+                Untested
+            </div>
+            <div class="vertical-tab-header-group-items">
+                
+                {#each providers.List as provider}
+                    {#if provider.untested}
+
+                        <div onclick={()=>{clickProvider(provider.id)}} 
+                            class="vertical-tab-nav-item"                            
+                            class:is-active={provider.id == selectedProviderId}>
+                            {provider.name}
+                        </div>
+                        
+                    {/if}
+                {/each}
+
+            </div>
+            
+            <div class="vertical-tab-header-group-title">
+                Your
+            </div>
+            <div class="vertical-tab-header-group-items">
+                
+                <div onclick={()=>{clickProvider(RECENT_TAB)}} 
+                    class="vertical-tab-nav-item"                            
+                    class:is-active={RECENT_TAB == selectedProviderId}>
+                    Resent
+                    <div class="vertical-tab-nav-item-chevron">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-chevron-right">
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
                     </div>
-
                 </div>
-            </div>  
-                
-        </div>
 
-        <div class="vertical-tab-content-container">
-            <div class="svelte-llm-model-list-container">
-                <models-filter>
+            </div>
+        </div>  
+            
+    </div>
 
-                    <models-buttons>
+    <div class="vertical-tab-content-container">
+        <div class="svelte-llm-model-list-container">
+            <models-filter>
 
-                        <button 
-                            class="clickable-icon" 
-                            class:disabled={isUpdating || !hasKey}
-                            disabled={isUpdating || !hasKey}
-                            aria-label="Refresh models from {selectedProviderName}" 
-                            onclick={fetchModels}>
-                            <RefreshCcw size={16}/>  
-                        </button>
+                <models-buttons>
 
-                        <button 
-                            class="clickable-icon" 
-                            aria-label="Review models from {selectedProviderName}" 
-                            disabled={isSpecial}
-                            onclick={()=>{window.open(selectedProvider.models)}}>
-                            <SquareArrowOutUpRight size={16}/>  
-                        </button>
+                    <button 
+                        class="clickable-icon" 
+                        class:disabled={isUpdating || !hasKey}
+                        disabled={isUpdating || !hasKey}
+                        aria-label="Refresh models from {selectedProviderName}" 
+                        onclick={fetchModels}>
+                        <RefreshCcw size={16}/>  
+                    </button>
 
-                    </models-buttons>
+                    <button 
+                        class="clickable-icon" 
+                        aria-label="Review models from {selectedProviderName}" 
+                        disabled={isSpecial}
+                        onclick={()=>{window.open(selectedProvider.models)}}>
+                        <SquareArrowOutUpRight size={16}/>  
+                    </button>
 
+                </models-buttons>
+
+                <input 
+                    type="text"
+                    class="models-filter-name inputbox2"
+                    class:disabled={!isSpecial && (!hasKey || !hasModels)}
+                    placeholder="Filter models by name"
+                    disabled={!hasKey || !hasModels}
+                    bind:value={modelSelectState.FilterName}>
+
+                <label 
+                    class="models-filter-free"
+                    class:disabled={!selectedProviderPrice || !hasKey || !hasModels}
+                    aria-label="Show only free models">
                     <input 
-                        type="text"
-                        class="models-filter-name inputbox2"
-                        class:disabled={!isSpecial && (!hasKey || !hasModels)}
-                        placeholder="Filter models by name"
-                        disabled={!hasKey || !hasModels}
-                        bind:value={modelSelectState.FilterName}>
-
-                    <label 
-                        class="models-filter-free"
-                        class:disabled={!selectedProviderPrice || !hasKey || !hasModels}
-                        aria-label="Show only free models">
-                        <input 
-                            type="checkbox" 
-                            disabled={!selectedProviderPrice || !hasKey || !hasModels}
-                            bind:checked={modelSelectState.FilterFree}> Free
-                    </label>
+                        type="checkbox" 
+                        disabled={!selectedProviderPrice || !hasKey || !hasModels}
+                        bind:checked={modelSelectState.FilterFree}> Free
+                </label>
 
 
-                </models-filter>
+            </models-filter>
 
-                <div class="vertical-tab-content">
-                    <div class="vertical-tab-header-group">
-                        <div class="vertical-tab-header-group-title">
-                            Models from {selectedProviderName}
-                        </div>
-                        <div class="vertical-tab-header-group-items">
+            <div class="vertical-tab-content">
+                <div class="vertical-tab-header-group">
+                    <div class="vertical-tab-header-group-title">
+                        Models from {selectedProviderName}
+                    </div>
+                    <div class="vertical-tab-header-group-items">
 
-                            {#if !isSpecial && selectedProvider.untested}
-                                <untested>
-                                    Access to this provider is implemented according to its documentation, but has not been tested by the developer of Canvas LLM. 
-                                    If you use it, please <a href="https://github.com/farlenkov/obsidian-canvas-llm/issues">share</a> your results with me.
-                                </untested>
-                            {/if}
+                        {#if !isSpecial && selectedProvider.untested}
+                            <untested>
+                                Access to this provider is implemented according to its documentation, but has not been tested by the developer of Canvas LLM. 
+                                If you use it, please <a href="https://github.com/farlenkov/obsidian-canvas-llm/issues">share</a> your results with me.
+                            </untested>
+                        {/if}
 
-                            {#if !isSpecial && !hasKey}
+                        {#if !isSpecial && !hasKey}
+                            <div class="error-message">
+                                {#if selectedProvider.isLocal}
+                                    You did not provide base URL for <b>{selectedProvider.name}</b>.
+                                    <br>
+                                    <br>
+                                    You can read quickstart guide here:
+                                    <br>
+                                    <a href="{selectedProvider.keys}" target="_blank" title="Read quickstart guide">
+                                        {selectedProvider.keys}
+                                    </a>
+                                    <br>
+                                    <br>
+                                    And paste your base URL in settings:
+                                {:else}
+                                    You did not provide the API key for <b>{selectedProvider.name}</b>.
+                                    <br>
+                                    <br>
+                                    You can get API key here:
+                                    <br>
+                                    <a href="{selectedProvider.keys}" target="_blank" title="Get API Key">
+                                        {selectedProvider.keys}
+                                    </a>
+                                    <br>
+                                    <br>
+                                    And paste your API key in settings:
+                                {/if}
+                                <br>
+                                <div class="button-wrapper">
+                                    <button 
+                                        onclick={onShowSettings}>
+                                        Open Settings
+                                    </button>
+                                </div>
+                            </div>
+                        {:else}
+                            {#if !isSpecial && !hasModels}
                                 <div class="error-message">
-                                    {#if selectedProvider.isLocal}
-                                        You did not provide base URL for <b>{selectedProvider.name}</b>.
-                                        <br>
-                                        <br>
-                                        You can read quickstart guide here:
-                                        <br>
-                                        <a href="{selectedProvider.keys}" target="_blank" title="Read quickstart guide">
-                                            {selectedProvider.keys}
-                                        </a>
-                                        <br>
-                                        <br>
-                                        And paste your base URL in settings:
-                                    {:else}
-                                        You did not provide the API key for <b>{selectedProvider.name}</b>.
-                                        <br>
-                                        <br>
-                                        You can get API key here:
-                                        <br>
-                                        <a href="{selectedProvider.keys}" target="_blank" title="Get API Key">
-                                            {selectedProvider.keys}
-                                        </a>
-                                        <br>
-                                        <br>
-                                        And paste your API key in settings:
-                                    {/if}
+                                    List of models for <b>{selectedProvider.name}</b> not downloaded yet.
                                     <br>
                                     <div class="button-wrapper">
-                                        <button 
-                                            onclick={onShowSettings}>
-                                            Open Settings
+
+                                        <button                                                 
+                                            disabled={isUpdating}
+                                            onclick={fetchModels}>
+                                            
+                                            {#if isUpdating}
+                                                Getting models...
+                                            {:else}
+                                                Get model list
+                                            {/if}
                                         </button>
+
                                     </div>
-                                </div>
-                            {:else}
-                                {#if !isSpecial && !hasModels}
-                                    <div class="error-message">
-                                        List of models for <b>{selectedProvider.name}</b> not downloaded yet.
-                                        <br>
-                                        <div class="button-wrapper">
 
-                                            <button                                                 
-                                                disabled={isUpdating}
-                                                onclick={fetchModels}>
-                                                
-                                                {#if isUpdating}
-                                                    Getting models...
-                                                {:else}
-                                                    Get model list
-                                                {/if}
-                                            </button>
-
-                                        </div>
-
-                                        {#if errorMessage}
-                                            <error>
-                                                {errorMessage}
-                                                <button type="button" class="btn-dark" onclick={() => {errorMessage = null}}>
-                                                    <XIcon size={24} strokeWidth={2}/>
-                                                </button>
-                                            </error>
-                                        {/if}
-                                    </div>
-                                {:else}
                                     {#if errorMessage}
                                         <error>
                                             {errorMessage}
@@ -280,41 +270,51 @@
                                             </button>
                                         </error>
                                     {/if}
-
-                                    {#each settings.GetModels(selectedProviderId) as model}
-                                        {#if checkFilter(model)}
-                                            <div onclick={()=>{clickModel(model)}} 
-                                                class="vertical-tab-nav-item"
-                                                aria-label="{getModelDesc(model)}"
-                                                class:is-active={modelSelectState.ModelID == model.id}>
-
-                                                {#if (model.prompt + model.completion) != 0}
-                                                    {model.id}
-                                                {:else}
-                                                    {model.id.replace(":free","")} 
-                                                    <label-free>free</label-free>
-                                                {/if}
-
-                                                {#if isSpecial}
-                                                    <label-provider>
-                                                        {getProviderName(model)}
-                                                    </label-provider>
-                                                {/if}
-                                                    
-                                                <!-- <div class="vertical-tab-nav-item-chevron">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg>
-                                                </div> -->
-                                            </div>
-                                        {/if}
-                                    {/each}
+                                </div>
+                            {:else}
+                                {#if errorMessage}
+                                    <error>
+                                        {errorMessage}
+                                        <button type="button" class="btn-dark" onclick={() => {errorMessage = null}}>
+                                            <XIcon size={24} strokeWidth={2}/>
+                                        </button>
+                                    </error>
                                 {/if}
+
+                                {#each settings.GetModels(selectedProviderId) as model}
+                                    {#if checkFilter(model)}
+                                        <div onclick={()=>{clickModel(model)}} 
+                                            class="vertical-tab-nav-item"
+                                            aria-label="{getModelDesc(model)}"
+                                            class:is-active={modelSelectState.ModelID == model.id}>
+
+                                            {#if (model.prompt + model.completion) != 0}
+                                                {model.id}
+                                            {:else}
+                                                {model.id.replace(":free","")} 
+                                                <label-free>free</label-free>
+                                            {/if}
+
+                                            {#if isSpecial}
+                                                <label-provider>
+                                                    {getProviderName(model)}
+                                                </label-provider>
+                                            {/if}
+                                                
+                                            <!-- <div class="vertical-tab-nav-item-chevron">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg>
+                                            </div> -->
+                                        </div>
+                                    {/if}
+                                {/each}
                             {/if}
-                        </div>
+                        {/if}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 <style>
 

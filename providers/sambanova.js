@@ -56,21 +56,7 @@ export default class SambaNova extends Provider
     {            
         if (!data?.choices)
             return [""];
-
-        let text = "";
-        let reasoning = "";
-
-        data.choices.forEach(choice => 
-        {
-            const content = choice.message.content;
-            const thinkMatch = content.match(/<think>([\s\S]*?)<\/think>/);
-            reasoning = thinkMatch ? thinkMatch[1].trim() : "";
-            text = content.replace(/<think>[\s\S]*?<\/think>/, "").trim();
-        });
-
-        if (reasoning)
-            return [text, reasoning];
         else
-            return [text];
+            return [data.choices[0].message.content];
     }
 }

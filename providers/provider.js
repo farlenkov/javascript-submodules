@@ -29,8 +29,10 @@ export default class Provider
         };
         
         console.log(`[LLM] FetchModels → ${this.name}`, options);
+        const start = performance.now();
         const resp = await this.CallHttp(options);
-        console.log(`[LLM] FetchModels ← ${this.name}`, resp);
+        const duration = (performance.now() - start) / 1000;
+        console.log(`[LLM] FetchModels ← ${this.name} (${(duration).toFixed(3)}s)`, resp);
 
         const text = await resp.text;
         const data = this.ParseResponse(text);
@@ -78,14 +80,29 @@ export default class Provider
             };
 
             console.log(`[LLM] CallModel → ${this.name} / ${model.name}`, options);
+            const start = performance.now();
             const resp = await this.CallHttp(options);
-            console.log(`[LLM] CallModel ← ${this.name} / ${model.name}`, resp);
+            const duration = (performance.now() - start) / 1000;
+            console.log(`[LLM] CallModel ← ${this.name} / ${model.name} (${(duration).toFixed(3)}s)`, resp);
             
             const text = await resp.text;
             const data = this.ParseResponse(text);
             this.CheckError(data);
       
             const markdowns = this.ReadResponse(data);
+
+            if (markdowns.length === 1)
+            {
+                const thinkMatch = markdowns[0].match(/<think>([\s\S]*?)<\/think>/);
+
+                if (thinkMatch)
+                { 
+                    const reasoning = thinkMatch[1].trim();
+                    const text = markdowns[0].replace(/<think>[\s\S]*?<\/think>/, "").trim();
+                    return [text, reasoning];
+                }
+            }
+
             return markdowns;
         } 
         catch (error) 

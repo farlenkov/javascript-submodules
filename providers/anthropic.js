@@ -52,7 +52,7 @@ export default class Anthropic extends Provider
         return {
             model : model.id,
             messages : messages,
-            max_tokens : 2048 * 4 };
+            max_tokens : 4096 };
     }
 
     ReadResponse(data)

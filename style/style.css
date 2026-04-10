@@ -14,3 +14,38 @@
         height: 100%;
     }
 }
+
+.svelte-llm-model-select-container 
+{
+    .modal
+    {
+        width:      var(--modal-width);
+        height:     var(--modal-height);
+
+        max-width:  40em;
+        max-height: 40em;
+
+        padding: 0;
+
+        .modal-content
+        {
+            height: 98%;
+
+            .vertical-tab-header
+            {
+                border-inline-end: 1px solid var(--divider-color);
+            }
+
+            .vertical-tab-header,
+            .vertical-tab-content-container
+            {
+                /* padding-top: 3em; */
+            }
+
+            .vertical-tab-header
+            {
+                padding-top: 2.25em;
+            }
+        }
+    }
+}
