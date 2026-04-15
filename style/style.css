@@ -17,4 +17,5 @@
     .dim { filter: brightness(0.5); }
     .display-contents { display: contents; }
     .color-text-accent { color:var(--text-accent); }
+    .text-select { cursor: text !important; user-select: text !important; }
 }
