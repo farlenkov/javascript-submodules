@@ -20,3 +20,10 @@ export function truncateByLines(str, max, end = '...')
         .join('\n') +
         (lines.length > max ? '\n' + end : '');
 }
+
+export function compareStrings(a, b)
+{
+    if (a < b) return -1;
+    if (a > b) return 1;
+    return 0;
+}
