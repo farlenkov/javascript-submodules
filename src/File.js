@@ -26,3 +26,9 @@ export async function isFileExists(app, filePath)
     const file = app.vault.getFileByPath(normalizedFilePath);
     return file != null;
 }
+
+export function loadAllFilesInFolder(app, folderPath) 
+{
+    const allFiles = app.vault.getFiles();
+    return allFiles.filter(file => file.path.startsWith(folderPath));
+}

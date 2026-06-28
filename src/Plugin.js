@@ -3,34 +3,23 @@ import { createNewFile } from './File.js';
 
 export default class FilePlugin extends Plugin 
 {
-    async onload() 
-    {
-        this.registerFileView();
-        this.registerMenuItem();
-
-        this.addRibbonIcon(
-            this.MENU_ICON, 
-            this.RIBBON_LABEL, 
-            () => { this.createNewFile("/"); });
-    }
-
-    async onunload() 
-    {
-        
-    }
-
-    async registerFileView()
+    async registerFileView(fileExt, FileView)
     {
         this.registerExtensions(
-            [this.FILE_EXT], 
-            this.VIEW_TYPE);
+            [fileExt], 
+            FileView.VIEW_TYPE);
 
         this.registerView(
-            this.VIEW_TYPE,
-            (leaf) => new this.FILE_VIEW(leaf, this));
+            FileView.VIEW_TYPE,
+            (leaf) => new FileView(leaf, this));
     }
     
-    async registerMenuItem()
+    async registerMenuItem(
+        menuLabel, 
+        menuIcon,
+        fileName,
+        fileExt,
+        defaultContent)
     {
         const fileMenuEvent = this.app.workspace.on(
             'file-menu', 
@@ -40,11 +29,15 @@ export default class FilePlugin extends Plugin
                 { 
                     menu.addItem((item) => 
                     {
-                        item.setTitle(this.MENU_LABEL)
-                            .setIcon(this.MENU_ICON) 
+                        item.setTitle(menuLabel)
+                            .setIcon(menuIcon) 
                             .onClick(async () =>
                             {
-                                this.createNewFile(menuFile.path);
+                                this.createNewFile(
+                                    menuFile.path, 
+                                    fileName, 
+                                    fileExt,
+                                    defaultContent);
                             });
                     });
                 }
@@ -53,16 +46,21 @@ export default class FilePlugin extends Plugin
         this.registerEvent(fileMenuEvent);
     }
     
-    async createNewFile(folderPath)
+    async createNewFile(
+        folderPath, 
+        fileName, 
+        fileExt,
+        defaultContent)
     {
-        const fileJson = await this.getDefaultContent();
-
+        if (typeof defaultContent === 'function')
+            defaultContent = defaultContent();
+        
         await createNewFile(
             this.app, 
             folderPath,
-            this.FILE_NAME,
-            this.FILE_EXT,
-            fileJson);
+            fileName,
+            fileExt,
+            defaultContent);
     }
 
     async getDefaultContent()

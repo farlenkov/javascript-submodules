@@ -3,30 +3,31 @@ import { mount, unmount } from 'svelte'
 
 export default class FileView extends TextFileView  
 {
-    constructor(leaf, plugin, AppView, AppState) 
+    constructor(leaf, plugin, viewType, AppView, AppState) 
     {
         super(leaf);
 
         this.plugin = plugin;
         this.AppView = AppView;
+        this.viewType = viewType;
 
-        this.appState = new AppState();
-        this.appState.requestSave = () => this.requestSave();
+        // this.appState = new AppState();
+        // this.appState.requestSave = () => this.requestSave();
 
-        this.appState.view = this;
-        this.appState.plugin = plugin;
-        this.appState.app = plugin.app;
-        this.appState.leaf = plugin.leaf;
+        // this.appState.view = this;
+        // this.appState.plugin = plugin;
+        // this.appState.app = plugin.app;
+        // this.appState.leaf = plugin.leaf;
     }
 
     getViewType() 
     {
-        return this.VIEW_TYPE;
+        return this.viewType;
     }
 
     async setViewData (fileContents, clear)
     {
-        this.fileContents = fileContents;        
+        this.fileJson = JSON.parse(fileContents);
         this.unmountView();
         
         const viewRoot = this.contentEl;
@@ -36,13 +37,17 @@ export default class FileView extends TextFileView
         this.appView = mount(this.AppView, 
         { 
             target : viewRoot, 
-            props : { appState : this.appState } 
+            props : 
+            { 
+                content : this.fileJson,
+                view : this 
+            } 
         });
     }
 
     getViewData()
     {
-        return this.fileContents;
+        return JSON.stringify(this.fileJson, null, '\t');
     }
 
     async onClose()
