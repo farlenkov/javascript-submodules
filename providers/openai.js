@@ -28,8 +28,8 @@ export default class OpenAI extends Provider
             "Authorization" : "Bearer " + this.getKey("Models") };
     }
 
-    // https://platform.openai.com/docs/guides/text-generation#conversations-and-context
     // https://platform.openai.com/docs/quickstart?language-preference=curl
+    // https://platform.openai.com/docs/guides/text-generation#conversations-and-context
     // https://platform.openai.com/docs/api-reference/chat/create#chat_create-temperature
 
     GetModelUrl(model, key)

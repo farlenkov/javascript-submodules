@@ -60,6 +60,20 @@ export default class Anthropic extends Provider
         if (!data?.content)
             return [""];
 
-        return data.content.map(content => content.text);
+        let text = "";
+        let thought = "";
+
+        for(const content of data.content)
+        {
+            if (content.type === "text")
+                text = content.text;
+            else if (content.type === "thinking")
+                thought = content.thinking;
+        }
+
+        if (thought)
+            return [text, thought];
+        else
+            return [text];
     }
 }

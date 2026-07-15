@@ -1,5 +1,6 @@
 import providers from "./ProviderInfo.svelte.js"
 import settings from '../settings/Settings.svelte.js';
+import { compareStrings } from '$lib/svelte-obsidian/src/String.js';
 
 class ModelInfo
 {
@@ -42,17 +43,8 @@ class ModelInfo
         try
         {
             const provider = providers.ById[providerId];
-            const models = await provider.FetchModels();
-
-            models.sort((a,b) => 
-            {
-                if (a.id < b.id)
-                    return -1;  
-                else if (a.id > b.id)
-                    return 1;    
-                else
-                    return 0;
-            });
+            const models = await provider.FetchModels();            
+            models.sort((a, b) => compareStrings(a.id, b.id));
 
             settings.SetModels(providerId, models);
             settings.Save();
