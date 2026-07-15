@@ -3,10 +3,10 @@ import { createNewFile } from './File.js';
 
 export default class FilePlugin extends Plugin 
 {
-    async registerFileView(fileExt, FileView)
+    async registerFileView(FileView)
     {
         this.registerExtensions(
-            [fileExt], 
+            [FileView.FILE_EXT], 
             FileView.VIEW_TYPE);
 
         this.registerView(

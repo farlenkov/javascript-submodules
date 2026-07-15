@@ -27,3 +27,41 @@ export function compareStrings(a, b)
     if (a > b) return 1;
     return 0;
 }
+
+export function escapeXmlAttr(value) 
+{
+    if (!value)
+        return value;
+    
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+export function isFilePath(path) 
+{
+    if (!path)
+        return false;
+
+    const segments = path.split('/');
+    const lastName = segments[segments.length - 1];
+    return /^[^.]+\.[^.]+$/.test(lastName);
+}
+
+export function isFolderPath(path)
+{
+    if (!path)
+        return false;
+
+    return !isFilePath(path);
+}
+
+export function extractTag(text, tag)
+{
+    const regExp = new RegExp(`<${tag}>([\\s\\S]*?)(?:<\\/${tag}>|$)`);
+    const match = text.match(regExp);
+    return match?.[1].trim() ?? null;
+}
