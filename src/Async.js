@@ -6,7 +6,7 @@ export function delay(timeout, callback)
     if (!timeout)
         callback();
     else
-        setTimeout(callback, timeout);
+        return setTimeout(callback, timeout);
 }
 
 export function sleep(timeout) 

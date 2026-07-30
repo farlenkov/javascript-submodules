@@ -5,7 +5,7 @@ export default class GenericModal extends Modal
 {
 	constructor(ViewClass, props, classList) 
     {
-        const app = props.app || props.appState.app;
+        const app = props.app || props.viewState.app;
 		super(app);
 
         this.props = props;

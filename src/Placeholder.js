@@ -30,9 +30,13 @@ export class PlaceholderSet
 
     parse(text)
     {
-        if (text)
-            for (const match of text.matchAll(PlaceholderSet.REGEX))
-                this.list.add(match[1]);
+        if (!text)
+            return this;
+
+        const matches = text.matchAll(PlaceholderSet.REGEX);
+
+        for (const match of matches)
+            this.list.add(match[1]);
 
         return this;
     }
