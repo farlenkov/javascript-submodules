@@ -1,11 +1,9 @@
-import providers from "./ProviderInfo.svelte.js"
-import settings from '../settings/Settings.svelte.js';
+import providers from "./ProviderInfo.js"
+import settings from '../settings/Settings.js';
 import { compareStrings } from '$lib/svelte-obsidian/src/String.js';
 
 class ModelInfo
-{
-    Updating = $state({});
-    
+{    
     constructor ()
     {
         this.readLocal ();
@@ -13,11 +11,11 @@ class ModelInfo
 
     async readLocal ()
     {
-        while (!settings.Data)
-            await new Promise((resolve) => setTimeout(resolve, 1));
+        while (!settings.settings?.Data)
+            await new Promise(resolve => setTimeout(resolve, 1));
 
         while (!providers.List)
-            await new Promise((resolve) => setTimeout(resolve, 1));
+            await new Promise(resolve => setTimeout(resolve, 1));
 
         providers.List.forEach(provider => 
         {
@@ -32,30 +30,26 @@ class ModelInfo
         });
     }
 
-    async FetchModels(providerId)
+    async fetchModels(providerId)
     {
-        if (this.Updating[providerId])
-            return;
-
-        this.Updating[providerId] = true;
         let error = null;
 
         try
         {
             const provider = providers.ById[providerId];
-            const models = await provider.FetchModels();            
+            const models = await provider.fetchModels();            
             models.sort((a, b) => compareStrings(a.id, b.id));
 
             settings.SetModels(providerId, models);
-            settings.Save();
+            settings.save();
             this.readLocal();
         }
         catch (ex)
         {
             error = ex;
+            // throw ex;
         }
 
-        this.Updating[providerId] = false;
         return error;
     }
 }

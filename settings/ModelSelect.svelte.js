@@ -1,9 +1,9 @@
-export default class ModelSelectState
+class ModelSelectState
 {
-    ModelID = $state("");
-    ProviderID = $state("");
-    ProviderTab = $state("");
-
-    FilterName = $state("");
-    FilterFree = $state(false);
+    prevModelId = $state("");
+    filterName = $state("");
+    filterFree = $state(false);
 }
+
+const state = new ModelSelectState();
+export default state;

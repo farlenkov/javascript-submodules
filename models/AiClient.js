@@ -1,8 +1,8 @@
-import providers from "./ProviderInfo.svelte.js"
+import providers from "./ProviderInfo.js"
 
 class AiClient
 {
-    async Call(providerId, modelId, messages)
+    async callModel(providerId, modelId, messages, mcp)
     {
         // GET PROVIDER
 
@@ -15,28 +15,29 @@ class AiClient
         if (!model)
             throw `[AiClient: Call] Invalid Model ID: ${providerId} / ${modelId}`;
 
-        // CALL PROVIDER
+        // CALL LLM
 
-        let markdowns = await provider.CallModel(model, messages);
+        let result = await provider.callModel(model, messages, mcp);
 
-        if (!markdowns.some(md => md != ""))
+        if (!result?.text &&
+            !result?.think)
             throw "API provider respond with empty message.";
 
-        return { markdowns };
+        return result;
     }
 
     // SPEAK
 
-    GetVoices(providerId)
+    getVoices(providerId)
     {
         const provider = providers.ById[providerId];
-        return provider.GetVoices();
+        return provider.getVoices();
     }
 
-    async Speak(providerId, modelId, voice, text)
+    async speak(providerId, modelId, voice, text)
     {
         const provider = providers.ById[providerId];
-        return await provider.Speak(modelId, voice, text);
+        return await provider.speak(modelId, voice, text);
     }
 }
 

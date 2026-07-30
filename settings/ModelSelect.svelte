@@ -1,49 +1,54 @@
 <script>
 
     import { RefreshCcw , SquareArrowOutUpRight, XIcon  } from 'lucide-svelte';
-    import providers from '../models/ProviderInfo.svelte.js';
-    import settings from './Settings.svelte.js';
-    import models from '../models/ModelInfo.svelte.js';
+    import modelSelectState from './ModelSelect.svelte.js';
+    import providers from '../models/ProviderInfo.js';
+    import settings from './Settings.js';
+    import models from '../models/ModelInfo.js';
 
     const RECENT_TAB = "recent";
     const FAVORITES_TAB = "favorites";
 
-    const 
-    { 
+    const {   
         onModelSelected, 
         onShowSettings, 
-        modelSelectState
-    } = $props();
+        modelId,
+        providerId } = $props();
 
-    let selectedProviderId = $state(modelSelectState.ProviderTab || modelSelectState.ProviderID);
+    let updating = $state({});
+    let errorMessage = $state("");
+    
+    let selectedProviderId = $state(providerId || settings.Data.defaultProvider);
     let selectedProvider = $derived(providers.ById[selectedProviderId]);
     let selectedProviderName = $derived(selectedProvider == null ? selectedProviderId : selectedProvider.name);
     let selectedProviderPrice = $derived(selectedProvider == null ? false : selectedProvider.price);
+    let selectedProviderModels = $state(settings.GetModels(selectedProviderId));
     
     let hasKey = $derived(settings.HasKey(selectedProviderId));
     let hasModels = $derived(settings.HasModels(selectedProviderId));
     let isSpecial = $derived(selectedProviderId == RECENT_TAB || selectedProviderId == FAVORITES_TAB);
-    let isUpdating = $derived(models.Updating[selectedProviderId]);
+    let isUpdating = $derived(updating[selectedProviderId]);
 
-    let errorMessage = $state();
+    if (modelSelectState.prevModelId !== modelId)
+        modelSelectState.filterName = "";
 
     function clickProvider(providerId)
     {
         selectedProviderId = providerId;
+        selectedProviderModels = settings.GetModels(selectedProviderId);
         errorMessage = null;
     }
 
     function clickModel (model)
     {
-        modelSelectState.ProviderTab = selectedProviderId;
-        modelSelectState.ModelID = model.id;
+        modelSelectState.prevModelId = model.id;
         settings.AddRecentModel(model);
         onModelSelected(model);
     }
 
     function checkFilter(model)
     {
-        if (selectedProviderPrice && modelSelectState.FilterFree)
+        if (selectedProviderPrice && modelSelectState.filterFree)
         {
             // if (typeof model.prompt !== 'number')
             //     return false;
@@ -55,7 +60,7 @@
                 return false;
         }
 
-        let nameFilter = modelSelectState.FilterName.trim();
+        let nameFilter = modelSelectState.filterName.trim();
 
         if (nameFilter && 
             model.id.toLowerCase().indexOf(nameFilter.toLowerCase()) < 0)
@@ -79,7 +84,14 @@
     async function fetchModels()
     {
         errorMessage = null;
-        errorMessage = await models.FetchModels(selectedProviderId);
+
+        if (updating[selectedProviderId])
+            return;
+
+        updating[selectedProviderId] = true;
+        errorMessage = await models.fetchModels(selectedProviderId);
+        selectedProviderModels = settings.GetModels(selectedProviderId);
+        delete updating[selectedProviderId];
     }
 
 </script>
@@ -96,7 +108,7 @@
                 {#each providers.List as provider}
                     {#if !provider.untested}
 
-                        <div onclick={()=>{clickProvider(provider.id)}} 
+                        <div onclick={() => clickProvider(provider.id)} 
                             class="vertical-tab-nav-item"                            
                             class:is-active={provider.id == selectedProviderId}>
                             {provider.name}
@@ -115,7 +127,7 @@
                 {#each providers.List as provider}
                     {#if provider.untested}
 
-                        <div onclick={()=>{clickProvider(provider.id)}} 
+                        <div onclick={() => clickProvider(provider.id)} 
                             class="vertical-tab-nav-item"                            
                             class:is-active={provider.id == selectedProviderId}>
                             {provider.name}
@@ -131,12 +143,16 @@
             </div>
             <div class="vertical-tab-header-group-items">
                 
-                <div onclick={()=>{clickProvider(RECENT_TAB)}} 
+                <div onclick={() => clickProvider(RECENT_TAB)} 
                     class="vertical-tab-nav-item"                            
                     class:is-active={RECENT_TAB == selectedProviderId}>
                     Resent
                     <div class="vertical-tab-nav-item-chevron">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-chevron-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                            width="24" height="24" viewBox="0 0 24 24" 
+                            fill="none" stroke="currentColor" stroke-width="2" 
+                            stroke-linecap="round" stroke-linejoin="round" 
+                            class="svg-icon lucide-chevron-right">
                             <path d="m9 18 6-6-6-6"></path>
                         </svg>
                     </div>
@@ -166,7 +182,7 @@
                         class="clickable-icon" 
                         aria-label="Review models from {selectedProviderName}" 
                         disabled={isSpecial}
-                        onclick={()=>{window.open(selectedProvider.models)}}>
+                        onclick={() => window.open(selectedProvider.models)}>
                         <SquareArrowOutUpRight size={16}/>  
                     </button>
 
@@ -178,7 +194,7 @@
                     class:disabled={!isSpecial && (!hasKey || !hasModels)}
                     placeholder="Filter models by name"
                     disabled={!hasKey || !hasModels}
-                    bind:value={modelSelectState.FilterName}>
+                    bind:value={modelSelectState.filterName}>
 
                 <label 
                     class="models-filter-free"
@@ -187,7 +203,7 @@
                     <input 
                         type="checkbox" 
                         disabled={!selectedProviderPrice || !hasKey || !hasModels}
-                        bind:checked={modelSelectState.FilterFree}> Free
+                        bind:checked={modelSelectState.filterFree}> Free
                 </label>
 
 
@@ -281,12 +297,12 @@
                                     </error>
                                 {/if}
 
-                                {#each settings.GetModels(selectedProviderId) as model}
+                                {#each selectedProviderModels as model}
                                     {#if checkFilter(model)}
-                                        <div onclick={()=>{clickModel(model)}} 
+                                        <div onclick={() => clickModel(model)} 
                                             class="vertical-tab-nav-item"
                                             aria-label="{getModelDesc(model)}"
-                                            class:is-active={modelSelectState.ModelID == model.id}>
+                                            class:is-active={modelId == model.id}>
 
                                             {#if (model.prompt + model.completion) != 0}
                                                 {model.id}

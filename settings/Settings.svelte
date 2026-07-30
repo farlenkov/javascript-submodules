@@ -2,8 +2,8 @@
 
     import { SquareArrowOutUpRight } from 'lucide-svelte';
 
-    import providers from "../models/ProviderInfo.svelte.js"
-    import settings from "./Settings.svelte.js"
+    import providers from "../models/ProviderInfo.js"
+    import settings from "./Settings.js"
 
     function getRowCount(value)
     {
@@ -41,10 +41,10 @@
                         <div class="setting-item-control">
                             <textarea 
                                 class="inputbox1" 
-                                rows={getRowCount(settings.Data[provider.id + "Key"])}
-                                bind:value={settings.Data[provider.id + "Key"]} 
+                                rows={getRowCount(settings.settings.Data[provider.id + "Key"])}
+                                bind:value={settings.settings.Data[provider.id + "Key"]} 
                                 placeholder="{provider.settingsInputLabel}"
-                                onchange={() => settings.Save()}></textarea>
+                                onchange={() => settings.save()}></textarea>
                         </div>
                     </div>
                 
