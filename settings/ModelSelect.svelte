@@ -398,9 +398,9 @@
 
                                     <ModelSelectItem 
                                         model={selectedModel}
+                                        hasParams={hasParams[settings.getParamsKey(selectedModel.providerId, selectedModel.id)]}
                                         {modelId}
                                         {isSpecial}
-                                        {hasParams}
                                         {selectedProvider}
                                         {clickModelParams} />
                                     
@@ -413,7 +413,7 @@
                                             {model}
                                             {modelId}
                                             {isSpecial}
-                                            {hasParams}
+                                            hasParams={hasParams[settings.getParamsKey(model.providerId, model.id)]}
                                             {clickModel}
                                             {selectedProvider}
                                             {clickModelParams} />

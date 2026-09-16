@@ -12,8 +12,6 @@
         isSpecial,
         clickModelParams } = $props();
 
-    const paramsKey = settings.getParamsKey(model.providerId, model.id);
-
     function getModelName(model)
     {
         let name = model.id;
@@ -68,7 +66,7 @@
     <button 
         type="button" 
         class="clickable-icon model-params-btn"
-        class:has-params={hasParams[paramsKey]}
+        class:has-params={hasParams}
         aria-label="Open model params" 
         onclick={e => clickModelParams(e, model)}>
         <Settings size={16}/> 
