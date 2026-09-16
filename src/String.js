@@ -21,8 +21,14 @@ export function truncateByLines(str, max, end = '...')
         (lines.length > max ? '\n' + end : '');
 }
 
-export function compareStrings(a, b)
+export function compareStrings(a, b, useLowerCase)
 {
+    if (useLowerCase)
+    {
+        if (typeof a === 'string') a = a.toLowerCase();
+        if (typeof b === 'string') b = b.toLowerCase();
+    }
+
     if (a < b) return -1;
     if (a > b) return 1;
     return 0;

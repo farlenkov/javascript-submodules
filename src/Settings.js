@@ -2,19 +2,23 @@ export default class SettingsState
 {
     FileVersion = 1;
 
-    constructor(plugin, defaults)
+    constructor (plugin)
     {
         this.app = plugin.app;
         this.plugin = plugin;
-        this.init(defaults);
     }
 
     async init (defaults)
     {
+        await this.load(defaults);
+        await this.save();
+    }
+
+    async load (defaults)
+    {
         const data = await this.plugin.loadData();
         this.Data = Object.assign({}, defaults, data);
         this.Data.version = this.FileVersion;
-        this.save();
     }
 
     async save ()

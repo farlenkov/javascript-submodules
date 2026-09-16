@@ -1,5 +1,14 @@
 .svelte-obsidian
 {
+    button
+    {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.35em;
+        line-height: 1;
+    }
+
     .modal-content
     {
         display: flex;
