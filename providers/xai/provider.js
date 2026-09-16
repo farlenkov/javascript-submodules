@@ -2,13 +2,12 @@ import Provider from '../common/provider.js';
 import Generate from './generate.js';
 import Models from './models.js';
 
-export default class Groq extends Provider
+export default class xAI extends Provider
 {
-    id = "groq";
-    name = "Groq";
-    keys = "https://console.groq.com/keys";
-    models = "https://console.groq.com/docs/models";
-    temperature = [0, 2, 1];
+    id = "xai";
+    name = "xAI";
+    keys = "https://console.x.ai/team/default/api-keys";
+    models = "https://docs.x.ai/docs/models";
         
     ModelsRequest = Models;
     GenerateRequest = Generate;
@@ -17,5 +16,5 @@ export default class Groq extends Provider
     {
         super();
         this.init(settings);
-    }    
+    }
 }

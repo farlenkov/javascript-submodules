@@ -1,4 +1,6 @@
-import providers from "./ProviderInfo.js"
+import providers from "./Providers.js"
+import models from "./Models.js"
+import settings from '../settings/Settings.js';
 
 class AiClient
 {
@@ -15,12 +17,21 @@ class AiClient
         if (!model)
             throw `[AiClient: Call] Invalid Model ID: ${providerId} / ${modelId}`;
 
+        // GET PARAMS
+
+        const paramsKey = settings.getParamsKey(providerId, modelId);
+        const modelParams = settings.getModelParams(paramsKey) || {};
+        const providerParams = settings.getModelParams(providerId) || {};
+
+        const callParams = Object.fromEntries(
+            Object.entries({...providerParams, ...modelParams})
+                .filter(([, v]) => v !== '' && v !== null && v !== undefined));
+
         // CALL LLM
 
-        let result = await provider.callModel(model, messages, mcp);
+        const result = await provider.callModel(model, messages, callParams, mcp);
 
-        if (!result?.text &&
-            !result?.think)
+        if (!result?.text)
             throw "API provider respond with empty message.";
 
         return result;

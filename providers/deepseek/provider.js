@@ -8,7 +8,6 @@ export default class DeepSeek extends Provider
     name = "DeepSeek";
     keys = "https://platform.deepseek.com/api_keys";
     models = "https://api-docs.deepseek.com/quick_start/pricing";
-    temperature = [0, 2, 1];
         
     ModelsRequest = Models;
     GenerateRequest = Generate;

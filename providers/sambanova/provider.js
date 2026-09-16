@@ -2,13 +2,12 @@ import Provider from '../common/provider.js';
 import Generate from './generate.js';
 import Models from './models.js';
 
-export default class xAI extends Provider
+export default class SambaNova extends Provider
 {
-    id = "xai";
-    name = "xAI";
-    keys = "https://console.x.ai/team/default/api-keys";
-    models = "https://docs.x.ai/docs/models";
-    temperature = [0, 2, 1];
+    id = "sambanova";
+    name = "SambaNova";
+    keys = "https://cloud.sambanova.ai/apis";
+    models = "https://cloud.sambanova.ai/plans/pricing";
         
     ModelsRequest = Models;
     GenerateRequest = Generate;

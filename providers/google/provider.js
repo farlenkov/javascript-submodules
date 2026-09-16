@@ -8,7 +8,6 @@ export default class Google extends Provider
     name = "Google";
     keys = "https://aistudio.google.com/app/apikey";
     models = "https://ai.google.dev/gemini-api/docs/pricing";
-    temperature = [0, 2, 1]; // generationConfig.temperature
 
     ModelsRequest = Models;
     GenerateRequest = Generate;

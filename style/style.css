@@ -1,22 +1,5 @@
 .svelte-llm-model-select
 {
-    overflow-y: hidden;
-    
-    .vertical-tab-header
-    {
-        border-inline-end: 1px solid var(--divider-color);
-    }
-
-    .svelte-llm-model-list-container
-    {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-}
-
-.svelte-llm-model-select-container 
-{
     .modal
     {
         width:      var(--modal-width);
@@ -26,26 +9,308 @@
         max-height: 40em;
 
         padding: 0;
+    }
 
-        .modal-content
+    /* .modal-content
+    {
+        height: 98%;
+    } */
+
+    .vertical-tabs-container
+    {
+        overflow-y: hidden;
+        height: 100%;
+
+        .vertical-tab-header
         {
-            height: 98%;
+            border-inline-end: 1px solid var(--divider-color);
+        }
 
-            .vertical-tab-header
-            {
-                border-inline-end: 1px solid var(--divider-color);
-            }
+        .svelte-llm-model-list-container
+        {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+    }
 
-            .vertical-tab-header,
-            .vertical-tab-content-container
-            {
-                /* padding-top: 3em; */
-            }
+    .vertical-tab-header,
+    .vertical-tab-header-group,
+    .vertical-tab-content
+    {
+        /* padding-top: 0;
+        padding-bottom: 0; */
+        padding: 0 var(--size-4-3);
+    }
 
-            .vertical-tab-header
+    .vertical-tab-header
+    {
+        border-inline-end: 1px solid var(--divider-color);
+        padding-top: 3em;
+    }
+
+    .vertical-tab-header-group-title
+    {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        line-height: 1;
+        gap: 0.5em;
+        font-size: var(--font-ui-small);
+        padding: var(--size-4-2) 0.4em;
+    }
+
+    .provider-list-item
+    {
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.1em 0 0.1em 0.5em;
+        min-height: 2em;
+    }
+    
+    /* .provider-list-title,
+    .provider-list-item
+    {
+        padding-left: 1em;
+    } */
+
+    .provider-list-item .provider-params-btn 
+    { 
+        visibility: hidden; 
+    }
+
+    .provider-list-item:hover .provider-params-btn,
+    .provider-list-item .provider-params-btn.has-params 
+    { 
+        visibility: visible; 
+    }
+
+    .model-list-item
+    {
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.1em 0 0.1em 0.5em;
+        min-height: 2em;
+        line-height: 1.3em;
+
+        free
+        {
+            display: inline-block;
+            font-size: 0.9em;
+            background-color: green;
+            color: white;
+            padding: 0 0.25em;
+            margin-left: 0.4em;
+        }
+
+        mark
+        {
+            margin-right: 0.4em;
+        }
+
+        provider
+        {
+            display: inline-block;
+            opacity: 0.5;
+            margin-left: 0.4em;
+        }
+    }
+
+    .model-list-item.is-active:first-child
+    {
+        margin-bottom: 1.5em;
+    }
+    
+    .model-list-item .model-name
+    {
+        padding: 0.2em 0;
+    }
+    
+    .model-list-item .model-params-btn
+    {
+        visibility: hidden;
+    }
+
+    .model-list-item .model-params-btn.has-params,
+    .model-list-item:hover .model-params-btn
+    {
+        visibility: visible;
+    }
+
+    models-filter
+    {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5em;
+
+        height: 3em;
+        padding: 0.2em 05em;
+        /* width: 100%;
+        height: 100%; 
+        position: relative;*/
+
+        input[type="text"].models-filter-name
+        {
+            width: 16.5em;
+            height: 1.75em;
+            text-align: center;
+        }
+
+        .models-filter-free
+        {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    models-buttons
+    {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+
+        button
+        {
+            padding: 0.5em;
+        }
+    }
+    
+    untested
+    {
+        display: block;
+        border-left: 3px solid var(--color-blue);
+        background-color: var(--background-secondary);
+        margin-bottom: 0.5em;
+        font-size: 0.8em;
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    .vertical-tabs-container
+    {
+        /* padding-top: 1.5em; */
+        /* height: 100%; */
+    }
+
+    .vertical-tab-content
+    {
+        /* padding: var(--size-4-3); */
+        flex: 1;
+    }
+
+    .vertical-tab-header-group-items 
+    {
+        margin-bottom: 1.5em;
+    }
+    
+    .vertical-tab-content-container
+    {
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .vertical-tab-header-group
+    {
+        padding-top: 0;
+    }
+
+    .error-message
+    {
+        padding: var(--size-4-1) var(--size-4-2);
+
+        error
+        {
+            margin-top: 1em;
+        }
+
+        .button-wrapper
+        {
+            display: inline-block;
+
+            button
             {
-                padding-top: 2.25em;
+                margin-top: 1em;
             }
+        }
+    }
+}
+
+.svelte-llm-model-params-container
+{
+    .modal
+    {
+        width:      var(--modal-width);
+        /* height:     var(--modal-height); */
+
+        max-width:  26em;
+        max-height: 45em;
+        
+        padding-top: 0;
+    }
+
+    .provider-name 
+    { 
+        margin: 0 0 0.25em 0; 
+        color: var(--color-base-50);
+    }
+
+    .model-name 
+    { 
+        margin-top: 0; 
+        margin-bottom: 2em; 
+    }
+
+    .params-list
+    {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
+
+    .params-list-item
+    {
+        display: flex;
+        gap: 0.5em;
+    }
+
+    .param-name,
+    .param-value
+    {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .buttons
+    {
+        margin-top: 2em;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+
+        button
+        {
+            font-size: 0.9em;
+        }
+
+        .copy-paste
+        {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35em;
+
+            button
+            {
+                color: var(--color-base-70);
+            }
+        }
+
+        .clear
+        {
+            color: var(--color-base-60);
         }
     }
 }

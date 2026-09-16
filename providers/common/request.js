@@ -19,7 +19,7 @@ export default class ProviderRequest
         try
         {
             console.groupCollapsed(`[LLM] ${note}`);
-            console.log("↗", options);
+            console.log("[↗]", options);
             
             const start = performance.now();
             const relay = this.settingsLLM.GetRelay();
@@ -44,7 +44,7 @@ export default class ProviderRequest
             }
 
             const duration = (performance.now() - start) / 1000;
-            console.log("↙", `${(duration).toFixed(3)}s`, resp);
+            console.log("[↙]", `${(duration).toFixed(3)}s`, resp);
             
             // PARSE
 

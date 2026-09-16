@@ -1,17 +1,17 @@
-import Alibaba      from '../providers/alibaba/alibaba.js';
-import Anthropic    from '../providers/anthropic/anthropic.js';
-import DeepSeek     from '../providers/deepseek/deepseek.js';
-import Google       from '../providers/google/google.js';
-import Groq         from '../providers/groq/groq.js';
-import Ollama       from '../providers/ollama/ollama.js';
-import OpenAI       from '../providers/openai/openai.js';
-import OpenRouter   from '../providers/openrouter/openrouter.js';
-import SambaNova    from '../providers/sambanova/sambanova.js';
-import xAI          from '../providers/xai/xai.js';
+import Alibaba      from '../providers/alibaba/provider.js';
+import Anthropic    from '../providers/anthropic/provider.js';
+import DeepSeek     from '../providers/deepseek/provider.js';
+import Google       from '../providers/google/provider.js';
+import Groq         from '../providers/groq/provider.js';
+import Local        from '../providers/local/provider.js';
+import OpenAI       from '../providers/openai/provider.js';
+import OpenRouter   from '../providers/openrouter/provider.js';
+import SambaNova    from '../providers/sambanova/provider.js';
+import xAI          from '../providers/xai/provider.js';
 
 import settings     from '../settings/Settings.js';
 
-class ProviderInfo
+class Providers
 {
     constructor ()
     {
@@ -31,7 +31,7 @@ class ProviderInfo
             new DeepSeek(settings),
             new Google(settings),
             new Groq(settings),
-            new Ollama(settings),
+            new Local(settings),
             new OpenAI(settings),
             new OpenRouter(settings),
             new SambaNova(settings),
@@ -43,5 +43,5 @@ class ProviderInfo
     }
 }
 
-const providerInfo = new ProviderInfo();
+const providerInfo = new Providers();
 export default providerInfo;

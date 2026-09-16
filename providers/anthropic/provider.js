@@ -2,14 +2,12 @@ import Provider from '../common/provider.js';
 import Generate from './generate.js';
 import Models from './models.js';
 
-export default class OpenRouter extends Provider
+export default class Anthropic extends Provider
 {
-    id = "openrouter";
-    name = "OpenRouter";
-    keys = "https://openrouter.ai/settings/keys";
-    models = "https://openrouter.ai/models";
-    price = true;
-    temperature = [0, 2, 1];
+    id = "anthropic";
+    name = "Anthropic";
+    keys = "https://console.anthropic.com/account/keys";
+    models = "https://docs.anthropic.com/en/docs/about-claude/pricing";
         
     ModelsRequest = Models;
     GenerateRequest = Generate;

@@ -23,7 +23,9 @@ export default class AnthropicGenerate extends GenerateRequest
     GetModelBody()
     {
         const body = super.GetModelBody();
-        body.max_tokens = 4096;
+        
+        // if (!body.max_tokens)
+        //     body.max_tokens = 4096;
         
         return body;
     }
@@ -40,6 +42,8 @@ export default class AnthropicGenerate extends GenerateRequest
 
     async ReadResponse(data)
     {
+        const stop_reason = data?.stop_reason;
+
         if (!data?.content?.length)
             throw this.emptyError;
 
@@ -60,6 +64,12 @@ export default class AnthropicGenerate extends GenerateRequest
                     result.think = content.thinking;
             }
 
+            if (!result?.text &&
+                !result?.think &&
+                stop_reason)
+                throw stop_reason;
+
+            this.readUsage(data, result);
             this.result = result;
             return;
         }
@@ -95,5 +105,14 @@ export default class AnthropicGenerate extends GenerateRequest
             role: "user",
             content: results,
         });
+    }
+
+    readUsage(data, result)
+    {
+        result.usage =
+        {
+            input : data.usage?.input_tokens,
+            output : data.usage?.output_tokens
+        }
     }
 }

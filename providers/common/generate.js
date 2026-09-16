@@ -4,12 +4,13 @@ export default class GenerateRequest extends ProviderRequest
 {
     emptyError = "API provider respond with empty message";
 
-    constructor(provider, model, messages, mcp)
+    constructor(provider, model, messages, params, mcp)
     {
         super(provider);
 
         this.mcp = mcp;
         this.model = model;
+        this.params = params;
         this.tools = this.ConvertTools(mcp.tools);
         this.messages = this.ConvertMessages(messages);
 
@@ -95,8 +96,8 @@ export default class GenerateRequest extends ProviderRequest
         {
             model : this.model.id,
             messages : this.messages,
-            tools : this.tools,
-            stream : false 
+            stream : false,
+            ...this.params
         };
 
         if (this.tools.length > 0)
@@ -110,7 +111,7 @@ export default class GenerateRequest extends ProviderRequest
 
     async ReadResponse(data)
     {
-        if (data?.choices?.[0].message?.tool_calls)
+        if (data?.choices?.[0].message?.tool_calls?.length > 0)
             await this.ReadTools(data.choices[0].message);
         else
             await this.ReadResult(data);
@@ -173,8 +174,18 @@ export default class GenerateRequest extends ProviderRequest
                 result.text = choice.message.content;
         }
 
+        this.readUsage(data, result);
         this.parseThinkTag(result);
         this.result = result;
+    }
+
+    readUsage(data, result)
+    {
+        result.usage =
+        {
+            input : data.usage?.prompt_tokens,
+            output : data.usage?.completion_tokens
+        }
     }
 
     parseThinkTag(result)

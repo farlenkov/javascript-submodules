@@ -2,13 +2,12 @@ import Provider from '../common/provider.js';
 import Generate from './generate.js';
 import Models from './models.js';
 
-export default class SambaNova extends Provider
+export default class OpenAI extends Provider
 {
-    id = "sambanova";
-    name = "SambaNova";
-    keys = "https://cloud.sambanova.ai/apis";
-    models = "https://cloud.sambanova.ai/plans/pricing";
-    temperature = [0, 1, 1];
+    id = "openai";
+    name = "OpenAI";
+    keys = "https://platform.openai.com/api-keys";
+    models = "https://platform.openai.com/docs/pricing";
         
     ModelsRequest = Models;
     GenerateRequest = Generate;

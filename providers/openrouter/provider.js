@@ -2,13 +2,13 @@ import Provider from '../common/provider.js';
 import Generate from './generate.js';
 import Models from './models.js';
 
-export default class OpenAI extends Provider
+export default class OpenRouter extends Provider
 {
-    id = "openai";
-    name = "OpenAI";
-    keys = "https://platform.openai.com/api-keys";
-    models = "https://platform.openai.com/docs/pricing";
-    temperature = [0, 2, 1];
+    id = "openrouter";
+    name = "OpenRouter";
+    keys = "https://openrouter.ai/settings/keys";
+    models = "https://openrouter.ai/models";
+    price = true;
         
     ModelsRequest = Models;
     GenerateRequest = Generate;

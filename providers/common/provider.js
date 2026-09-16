@@ -18,9 +18,9 @@ export default class Provider
         return await req.exec();
     }
 
-    async callModel(model, messages, mcp)
+    async callModel(model, messages, params, mcp)
     {
-        const req = new this.GenerateRequest(this, model, messages, mcp);
+        const req = new this.GenerateRequest(this, model, messages, params, mcp);
         return await req.exec();
     }
     

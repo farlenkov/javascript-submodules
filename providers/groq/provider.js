@@ -2,13 +2,12 @@ import Provider from '../common/provider.js';
 import Generate from './generate.js';
 import Models from './models.js';
 
-export default class Anthropic extends Provider
+export default class Groq extends Provider
 {
-    id = "anthropic";
-    name = "Anthropic";
-    keys = "https://console.anthropic.com/account/keys";
-    models = "https://docs.anthropic.com/en/docs/about-claude/pricing";
-    temperature = [0, 1, 1];
+    id = "groq";
+    name = "Groq";
+    keys = "https://console.groq.com/keys";
+    models = "https://console.groq.com/docs/models";
         
     ModelsRequest = Models;
     GenerateRequest = Generate;
@@ -17,5 +16,5 @@ export default class Anthropic extends Provider
     {
         super();
         this.init(settings);
-    }
+    }    
 }

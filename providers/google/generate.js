@@ -55,36 +55,48 @@ export default class GoogleGenerate extends GenerateRequest
         const body = 
         {
             contents : this.messages,
-            generationConfig : {},  
-            safetySettings : 
-            [
-                // https://ai.google.dev/api/generate-content#v1beta.SafetySetting
+            // generationConfig : {},  
+            // safetySettings : 
+            // [
+            //     // https://ai.google.dev/api/generate-content#v1beta.SafetySetting
 
-                { category : "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold : "BLOCK_NONE" },
-                { category : "HARM_CATEGORY_DANGEROUS_CONTENT", threshold : "BLOCK_NONE" },
-                { category : "HARM_CATEGORY_CIVIC_INTEGRITY", threshold : "BLOCK_NONE" },
-                { category : "HARM_CATEGORY_HATE_SPEECH", threshold : "BLOCK_NONE" },
-                { category : "HARM_CATEGORY_HARASSMENT", threshold : "BLOCK_NONE" }
-            ]
+            //     { category : "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold : "BLOCK_NONE" },
+            //     { category : "HARM_CATEGORY_DANGEROUS_CONTENT", threshold : "BLOCK_NONE" },
+            //     { category : "HARM_CATEGORY_CIVIC_INTEGRITY", threshold : "BLOCK_NONE" },
+            //     { category : "HARM_CATEGORY_HATE_SPEECH", threshold : "BLOCK_NONE" },
+            //     { category : "HARM_CATEGORY_HARASSMENT", threshold : "BLOCK_NONE" }
+            // ]
         };
 
         if (this.tools.length > 0)
             body.tools = this.tools;
 
-        body.generationConfig.thinkingConfig = { includeThoughts : true };
+        // body.generationConfig.thinkingConfig = { includeThoughts : true };
         return body;
     }
 
     async ReadResponse(data)
     {
-        const content = data?.candidates?.[0]?.content;
+        const candidate = data?.candidates?.[0];
+        const content = candidate?.content;
+        const finishReason = candidate?.finishReason;
+        const finishMessage = candidate?.finishMessage;
+        const blockReason = data?.promptFeedback?.blockReason;
 
-        if (data?.promptFeedback?.blockReason)
-            throw data.promptFeedback.blockReason;
+        if (!content?.parts)
+        {
+            if (blockReason)
+                throw blockReason;
 
-        if (!content)
+            if (finishMessage)
+                throw finishMessage;
+
+            if (finishReason)
+                throw finishReason;
+
             throw this.emptyError;
-
+        }
+            
         const functionCalls = content.parts.filter(part => part.functionCall ? true : false);
 
         // DONE
@@ -101,6 +113,7 @@ export default class GoogleGenerate extends GenerateRequest
                     result.text = part.text;
             }
 
+            this.readUsage(data, result);
             this.result = result;
             return;
         }
@@ -132,6 +145,15 @@ export default class GoogleGenerate extends GenerateRequest
         {
             this.messages.push(content);
             this.messages.push ({ role : "user", parts : parts });
+        }
+    }
+
+    readUsage(data, result)
+    {
+        result.usage =
+        {
+            input : data.usageMetadata?.promptTokenCount,
+            output : data.usageMetadata?.candidatesTokenCount
         }
     }
 }

@@ -8,7 +8,7 @@ export default class Ollama extends Provider
     name = "Ollama";
     keys = "https://docs.ollama.com/quickstart";
     models = "https://ollama.com/search";
-    temperature = [0, 2, 1];
+    // temperature = [0, 2, 1];
     isLocal = true;
         
     ModelsRequest = Models;
@@ -19,6 +19,6 @@ export default class Ollama extends Provider
         super();
         this.init(settings);
         this.settingsLinkLabel = "View Ollama quickstart guide";
-        this.settingsInputLabel = "Base url, http://localhost:11434/api";
+        this.settingsInputLabel = "Base url, http://localhost:11434/v1";
     }
 }

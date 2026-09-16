@@ -51,7 +51,7 @@ export default class McpHost
         if (config.url)
         {
             const url = new URL(config.url);
-            transport = new StreamableHTTPClientTransport(url);
+            transport = new StreamableHTTPClientTransport(url, {fetch : obsidianFetch});
         }
         else if (config.command)
         {
@@ -153,9 +153,38 @@ export default class McpHost
 
 async function obsidianFetch(input, init = {}) 
 {
-    const resp = await fetch(input, init);
+    return await fetch(input, init);
+    
+    // const url = typeof input === "string" 
+    //     ? input 
+    //     : input.url;
+
+    // const res = await requestUrl
+    // ({
+    //     url,
+    //     method : init.method ?? "GET",
+    //     headers : init.headers,
+    //     body : init.body,
+    //     throw : false,
+    // });
+
+    // return new Response(
+    //     res.text, 
+    //     {
+    //         status: res.status,
+    //         headers: res.headers,
+    //     });
+
+
+
+
+
+    // init.headers
+    // const resp = await fetch(input, init);
     // console.log({url : input, opts : init, resp : resp});
-    return resp;
+    // return resp;
+
+
 
     // const url = input instanceof URL
     //     ? input.toString()

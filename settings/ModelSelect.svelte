@@ -1,33 +1,52 @@
 <script>
 
-    import { RefreshCcw , SquareArrowOutUpRight, XIcon  } from 'lucide-svelte';
+    import { RefreshCcw , SquareArrowOutUpRight, XIcon, Settings  } from 'lucide-svelte';
     import modelSelectState from './ModelSelect.svelte.js';
-    import providers from '../models/ProviderInfo.js';
+    import providers from '../models/Providers.js';
     import settings from './Settings.js';
-    import models from '../models/ModelInfo.js';
+    import models from '../models/Models.js';
+    import ProviderListItem from './ProviderListItem.svelte';
+    import ModelSelectItem from './ModelSelectItem.svelte';
+    import ModelParams from './ModelParams.svelte';
+    import Modal from '$lib/svelte-obsidian/src/Modal.js';
 
     const RECENT_TAB = "recent";
     const FAVORITES_TAB = "favorites";
 
-    const {   
+    let {
+        app,
         onModelSelected, 
         onShowSettings, 
         modelId,
         providerId } = $props();
 
+    if (providerId && !providers.ById[providerId])
+    {
+        providerId = null;
+        modelId = null;
+    }
+
     let updating = $state({});
     let errorMessage = $state("");
     
-    let selectedProviderId = $state(providerId || settings.Data.defaultProvider);
+    let selectedProviderId = $state(providerId || settings.GetDefaultProvider());
     let selectedProvider = $derived(providers.ById[selectedProviderId]);
-    let selectedProviderName = $derived(selectedProvider == null ? selectedProviderId : selectedProvider.name);
+    let selectedProviderName = $derived(selectedProvider == null ? selectedProviderId[0].toUpperCase() + selectedProviderId.slice(1) : selectedProvider.name);
     let selectedProviderPrice = $derived(selectedProvider == null ? false : selectedProvider.price);
-    let selectedProviderModels = $state(settings.GetModels(selectedProviderId));
+    let selectedProviderModels = $state([]);
+    let selectedModel = $state();
     
+    let hasParams = $state({});
     let hasKey = $derived(settings.HasKey(selectedProviderId));
-    let hasModels = $derived(settings.HasModels(selectedProviderId));
+    let hasModels = $derived(selectedProviderModels.length > 0);
     let isSpecial = $derived(selectedProviderId == RECENT_TAB || selectedProviderId == FAVORITES_TAB);
     let isUpdating = $derived(updating[selectedProviderId]);
+
+    updateModels();
+
+    for (const provider of providers.List)
+        if (settings.getModelParams(provider.id))
+            hasParams[provider.id] = true;
 
     if (modelSelectState.prevModelId !== modelId)
         modelSelectState.filterName = "";
@@ -35,7 +54,7 @@
     function clickProvider(providerId)
     {
         selectedProviderId = providerId;
-        selectedProviderModels = settings.GetModels(selectedProviderId);
+        updateModels();
         errorMessage = null;
     }
 
@@ -69,18 +88,6 @@
         return true;
     }
 
-    function getModelDesc(model)
-    {
-        const provider = providers.ById[model.providerId];
-        return `[ ${provider.name} / ${model.owner} ] ${model.desc}`;
-    }
-
-    function getProviderName(model)
-    {
-        const provider = providers.ById[model.providerId];
-        return `(${provider.name})`;
-    }
-    
     async function fetchModels()
     {
         errorMessage = null;
@@ -90,36 +97,115 @@
 
         updating[selectedProviderId] = true;
         errorMessage = await models.fetchModels(selectedProviderId);
-        selectedProviderModels = settings.GetModels(selectedProviderId);
+        updateModels();
         delete updating[selectedProviderId];
+    }
+
+    function updateModels()
+    {
+        const models = settings.GetModels(selectedProviderId);
+        selectedProviderModels = models;
+        // console.log("selectedProviderModels", selectedProviderId, [...selectedProviderModels]);
+
+        selectedModel = null;
+
+        for (const model of models)
+        {
+            if (selectedProviderId === providerId &&
+                model.id === modelId)
+            {
+                selectedModel = model;
+            }
+
+            const paramsKey = settings.getParamsKey(model.providerId, model.id);
+            hasParams[paramsKey] = settings.getModelParams(paramsKey) ? true : false;
+        }
+    }
+
+    function clickModelParams(e, model)
+    {
+        e.stopPropagation();
+
+        const paramsKey = settings.getParamsKey(model.providerId, model.id);
+        const modelParams = settings.getModelParams(paramsKey) || {};
+
+        new Modal(
+            ModelParams, 
+            {
+                app,
+                model,
+                provider : providers.ById[model.providerId],
+                params : modelParams,
+                
+                onChange : params => 
+                {
+                    settings.setModelParams(paramsKey, params);
+                    updateModels();
+                }
+            }, 
+            [
+                "svelte-obsidian", 
+                "canvas-llm", 
+                "svelte-llm-model-params-container"
+            ])
+            .open();
+    }
+
+    function clickProviderParams(e, provider)
+    {
+        e.stopPropagation();
+
+        const paramsKey = provider.id;
+        const providerParams = settings.getModelParams(paramsKey) || {};
+
+        new Modal(
+            ModelParams, 
+            {
+                app,
+                provider : provider,
+                params : providerParams,
+                
+                onChange : params => 
+                {
+                    settings.setModelParams(paramsKey, params);
+                    hasParams[paramsKey] = params ? true : false;
+                }
+            }, 
+            [
+                "svelte-obsidian", 
+                "canvas-llm", 
+                "svelte-llm-model-params-container"
+            ])
+            .open();
     }
 
 </script>
 
-<div class="svelte-llm-model-select vertical-tabs-container">
+<div class="vertical-tabs-container">
 
     <div class="vertical-tab-header">
         <div class="vertical-tab-header-group">
-            <div class="vertical-tab-header-group-title">
-                API Providers
+            <div class="vertical-tab-header-group-title provider-list-title">
+                Providers
             </div>
             <div class="vertical-tab-header-group-items">  
 
                 {#each providers.List as provider}
                     {#if !provider.untested}
 
-                        <div onclick={() => clickProvider(provider.id)} 
-                            class="vertical-tab-nav-item"                            
-                            class:is-active={provider.id == selectedProviderId}>
-                            {provider.name}
-                        </div>
+                        <ProviderListItem
+                            {provider}
+                            isActive={provider.id == selectedProviderId}
+                            hasParams={hasParams[provider.id]}
+                            {clickProvider}
+                            {clickProviderParams} />
 
                     {/if}
                 {/each}
 
             </div>
             
-            <div class="vertical-tab-header-group-title">
+            <div class="vertical-tab-header-group-title provider-list-title">
                 Untested
             </div>
             <div class="vertical-tab-header-group-items">
@@ -127,24 +213,25 @@
                 {#each providers.List as provider}
                     {#if provider.untested}
 
-                        <div onclick={() => clickProvider(provider.id)} 
-                            class="vertical-tab-nav-item"                            
-                            class:is-active={provider.id == selectedProviderId}>
-                            {provider.name}
-                        </div>
+                        <ProviderListItem
+                            {provider}
+                            isActive={provider.id == selectedProviderId}
+                            hasParams={hasParams[provider.id]}
+                            {clickProvider}
+                            {clickProviderParams} />
                         
                     {/if}
                 {/each}
 
             </div>
             
-            <div class="vertical-tab-header-group-title">
+            <div class="vertical-tab-header-group-title provider-list-title">
                 Your
             </div>
             <div class="vertical-tab-header-group-items">
                 
                 <div onclick={() => clickProvider(RECENT_TAB)} 
-                    class="vertical-tab-nav-item"                            
+                    class="vertical-tab-nav-item provider-list-item"                            
                     class:is-active={RECENT_TAB == selectedProviderId}>
                     Resent
                     <div class="vertical-tab-nav-item-chevron">
@@ -163,8 +250,8 @@
             
     </div>
 
-    <div class="vertical-tab-content-container">
-        <div class="svelte-llm-model-list-container">
+    <div class="vertical-tab-content-container svelte-llm-model-list-container">
+        
             <models-filter>
 
                 <models-buttons>
@@ -206,13 +293,23 @@
                         bind:checked={modelSelectState.filterFree}> Free
                 </label>
 
-
             </models-filter>
 
             <div class="vertical-tab-content">
                 <div class="vertical-tab-header-group">
                     <div class="vertical-tab-header-group-title">
+
                         Models from {selectedProviderName}
+
+                        <!-- {#if !isSpecial}
+                            <button 
+                                type="button" 
+                                class="clickable-icon provider-params-btn"                            
+                                aria-label="Open provider params" 
+                                onclick={e => clickProviderParams()}>
+                                <Settings size={16}/> 
+                            </button>
+                        {/if} -->
                     </div>
                     <div class="vertical-tab-header-group-items">
 
@@ -297,30 +394,29 @@
                                     </error>
                                 {/if}
 
+                                {#if selectedModel}
+
+                                    <ModelSelectItem 
+                                        model={selectedModel}
+                                        {modelId}
+                                        {isSpecial}
+                                        {hasParams}
+                                        {selectedProvider}
+                                        {clickModelParams} />
+                                    
+                                {/if}
+
                                 {#each selectedProviderModels as model}
                                     {#if checkFilter(model)}
-                                        <div onclick={() => clickModel(model)} 
-                                            class="vertical-tab-nav-item"
-                                            aria-label="{getModelDesc(model)}"
-                                            class:is-active={modelId == model.id}>
 
-                                            {#if (model.prompt + model.completion) != 0}
-                                                {model.id}
-                                            {:else}
-                                                {model.id.replace(":free","")} 
-                                                <label-free>free</label-free>
-                                            {/if}
-
-                                            {#if isSpecial}
-                                                <label-provider>
-                                                    {getProviderName(model)}
-                                                </label-provider>
-                                            {/if}
-                                                
-                                            <!-- <div class="vertical-tab-nav-item-chevron">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg>
-                                            </div> -->
-                                        </div>
+                                        <ModelSelectItem 
+                                            {model}
+                                            {modelId}
+                                            {isSpecial}
+                                            {hasParams}
+                                            {clickModel}
+                                            {selectedProvider}
+                                            {clickModelParams} />
                                     {/if}
                                 {/each}
                             {/if}
@@ -328,133 +424,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
     </div>
 </div>
-
-<style>
-
-    .vertical-tabs-container
-    {
-        /* padding-top: 1.5em; */
-        /* height: 100%; */
-    }
-
-    .vertical-tab-content
-    {
-        padding: var(--size-4-3);
-        flex: 1;
-    }
-
-    .vertical-tab-header,
-    .vertical-tab-header-group,
-    .vertical-tab-content
-    {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-
-    .vertical-tab-header-group-items 
-    {
-        margin-bottom: 1.5em;
-    }
-    
-    .vertical-tab-content-container
-    {
-        margin-top: 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .vertical-tab-header-group
-    {
-        padding-top: 0;
-    }
-
-    .error-message
-    {
-        padding: var(--size-4-1) var(--size-4-2);
-
-        error
-        {
-            margin-top: 1em;
-        }
-
-        .button-wrapper
-        {
-            display: inline-block;
-
-            button
-            {
-                margin-top: 1em;
-            }
-        }
-    }
-
-    label-free
-    {
-        display: inline-block;
-        font-size: 0.9em;
-        background-color: green;
-        color: white;
-        padding: 0 0.25em;
-    }
-
-    label-provider
-    {
-        display: inline-block;
-        opacity: 0.5;
-        margin-left: 0.4em;
-    }
-
-    models-filter
-    {
-        display:flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1.5em;
-
-        padding: 0.2em 05em;
-        /* width: 100%;
-        height: 100%; 
-        position: relative;*/
-
-        input[type="text"].models-filter-name
-        {
-            width: 16.5em;
-            height: 1.75em;
-            text-align: center;
-        }
-
-        .models-filter-free
-        {
-            display: flex;
-            align-items: center;
-        }
-    }
-
-    models-buttons
-    {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0;
-
-        button
-        {
-            padding: 0.5em;
-        }
-    }
-    
-    untested
-    {
-        display: block;
-        border-left: 3px solid var(--color-blue);
-        background-color: var(--background-secondary);
-        margin-bottom: 0.5em;
-        font-size: 0.8em;
-        padding: 8px;
-        border-radius: 4px;
-    }
-
-</style>

@@ -2,7 +2,7 @@
 
     import { SquareArrowOutUpRight } from 'lucide-svelte';
 
-    import providers from "../models/ProviderInfo.js"
+    import providers from "../models/Providers.js"
     import settings from "./Settings.js"
 
     function getRowCount(value)
@@ -49,6 +49,9 @@
                     </div>
                 
                 {/each}
+                <div class="credits">
+                    Canvas LLM is powered by <a href="https://svelteflow.dev">Svelte Flow</a> from <a href="https://xyflow.com">xyflow</a>.
+                </div>
             </div>
         </div>
     </div>
@@ -60,6 +63,11 @@
     {
         padding-top: var(--size-4-4);
         padding-bottom: var(--size-4-4);
+    }
+
+    .vertical-tab-header-group
+    {
+        padding: 0;
     }
 
     .setting-item-name 
@@ -75,6 +83,11 @@
         overflow: hidden; 
         white-space: nowrap;
         width: 100%;
+    }
+
+    .credits
+    {
+        text-align: center;
     }
 
 </style>
