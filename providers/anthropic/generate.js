@@ -20,24 +20,12 @@ export default class AnthropicGenerate extends GenerateRequest
             "anthropic-dangerous-direct-browser-access" : "true" };
     }
 
-    GetModelBody()
-    {
-        const body = super.GetModelBody();
-        
-        // if (!body.max_tokens)
-        //     body.max_tokens = 4096;
-        
-        return body;
-    }
-
     ConvertTool(tool)
     {
         return {
-
             name : tool.name,
             description : tool.description,
-            input_schema : tool.inputSchema
-        };
+            input_schema : tool.inputSchema };
     }
 
     async ReadResponse(data)
@@ -85,6 +73,9 @@ export default class AnthropicGenerate extends GenerateRequest
                 name : call.name,
                 arguments : call.input,
             });
+
+            if (!result)
+                continue;
 
             results.push
             ({

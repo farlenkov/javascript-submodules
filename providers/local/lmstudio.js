@@ -8,7 +8,6 @@ export default class LMStudio extends Provider
     name = "LM Studio";
     keys = "https://lmstudio.ai/docs/developer/core/server";
     models = "https://lmstudio.ai/docs/app/basics/download-model";
-    // temperature = [0, 2, 1];
     isLocal = true;
         
     ModelsRequest = Models;

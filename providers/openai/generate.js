@@ -15,8 +15,8 @@ export default class OpenAIGenerate extends GenerateRequest
     {
         const body = super.GetModelBody();
 
-        if (body.tools)
-            body.reasoning_effort = "none";
+        // if (body.tools)
+        //     body.reasoning_effort = "none";
         
         return body;
     }

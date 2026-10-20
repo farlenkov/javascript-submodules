@@ -2,7 +2,7 @@ import ProviderRequest from './request.js'
 
 export default class GenerateRequest extends ProviderRequest
 {
-    emptyError = "API provider respond with empty message";
+    // emptyError = "API provider responds with empty message";
 
     constructor(provider, model, messages, params, mcp)
     {
@@ -111,7 +111,7 @@ export default class GenerateRequest extends ProviderRequest
 
     async ReadResponse(data)
     {
-        if (data?.choices?.[0].message?.tool_calls?.length > 0)
+        if (data?.choices?.[0]?.message?.tool_calls?.length > 0)
             await this.ReadTools(data.choices[0].message);
         else
             await this.ReadResult(data);
@@ -158,7 +158,11 @@ export default class GenerateRequest extends ProviderRequest
     async ReadResult(data)
     {
         if (!data?.choices)
-            throw this.emptyError;
+        {
+            // throw this.emptyError;
+            this.result = {};
+            return;
+        }
 
         const result = {};
 

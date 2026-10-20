@@ -8,7 +8,6 @@ export default class Ollama extends Provider
     name = "Ollama";
     keys = "https://docs.ollama.com/quickstart";
     models = "https://ollama.com/search";
-    // temperature = [0, 2, 1];
     isLocal = true;
         
     ModelsRequest = Models;

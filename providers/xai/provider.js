@@ -7,7 +7,7 @@ export default class xAI extends Provider
     id = "xai";
     name = "xAI";
     keys = "https://console.x.ai/team/default/api-keys";
-    models = "https://docs.x.ai/docs/models";
+    models = "https://docs.x.ai/developers/pricing";
         
     ModelsRequest = Models;
     GenerateRequest = Generate;

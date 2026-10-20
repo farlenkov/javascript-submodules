@@ -3,7 +3,7 @@
     import { SquareArrowOutUpRight } from 'lucide-svelte';
 
     import providers from "../models/Providers.js"
-    import settings from "./Settings.js"
+    import settings from "./Settings.svelte.js"
 
     function getRowCount(value)
     {
@@ -18,9 +18,6 @@
 <div class="vertical-tab-content-container">
     <div class="vertical-tab-content">
         <div class="vertical-tab-header-group">
-            <!-- <div class="vertical-tab-header-group-title">
-                Settings
-            </div> -->
             <div class="vertical-tab-header-group-items">
 
                 {#each providers.List as provider}

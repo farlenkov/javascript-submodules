@@ -75,8 +75,9 @@
 
     function clickUndo()
     {
-        values = backup;
+        values = {...backup};
         backup = null;
+        save();
     }
 
     async function clickCopy()
@@ -132,6 +133,7 @@
                     class="param-value"
                     value={value} 
                     placeholder={index == 0 ? "1.1" : "value"}
+                    aria-label={value}
                     onchange={e => onParamChange(name, name, e.currentTarget.value)}>
 
             </div>
@@ -141,13 +143,12 @@
 
     <div class="buttons">
         
-
         {#if !backup}
             <button 
                 class="clear" 
                 class:hidden={values_list.length <= 1} 
                 onclick={clickClear} 
-                aria-label="Remove all params">
+                aria-label="Delete all params">
                 <XIcon size={16} />
                 Clear
             </button>
@@ -158,15 +159,14 @@
             </button>
         {/if}
 
-
         <div class="copy-paste">
-            <button onclick={clickCopy} aria-label="Copy params">
+            <button onclick={clickCopy} aria-label="Copy all params to clipboard">
                 <Copy size={16} />
-                Copy
+                <!-- Copy -->
             </button>
-            <button onclick={clickPaste} aria-label="Paste params">
+            <button onclick={clickPaste} aria-label="Paste params from clipboard (override)">
                 <ClipboardPaste size={16} />
-                Paste
+                <!-- Paste -->
             </button>
         </div>
     </div>

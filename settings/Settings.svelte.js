@@ -1,45 +1,22 @@
 import { sleep, delay } from '$lib/svelte-obsidian/src/Async.js';
+import { compareStrings } from '$lib/svelte-obsidian/src/String.js';
+
+function getParamsKey()
+{
+    return `${this.providerId}//${this.id}`;
+}
 
 class SettingsState
 {
-    // FileVersion = 2;
+    bookmarkedModels = $state([])
 
-    getDefaults()
-    {
-        return {
-            defaultModel : "gemini-3-flash-preview",
-            defaultProvider : "google",
-            recentModels : [],
-            // launchCounter : 0,
-            modelParams :
-            {
-                anthropic : { max_tokens : 4096 },
-
-                local : { reasoning_effort : "none" },
-
-                google :
-                {
-                    generationConfig : { thinkingConfig : { includeThoughts : true }},
-
-                    safetySettings : 
-                    [
-                        // https://ai.google.dev/api/generate-content#v1beta.SafetySetting
-
-                        { category : "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold : "BLOCK_NONE" },
-                        { category : "HARM_CATEGORY_DANGEROUS_CONTENT", threshold : "BLOCK_NONE" },
-                        { category : "HARM_CATEGORY_CIVIC_INTEGRITY", threshold : "BLOCK_NONE" },
-                        { category : "HARM_CATEGORY_HATE_SPEECH", threshold : "BLOCK_NONE" },
-                        { category : "HARM_CATEGORY_HARASSMENT", threshold : "BLOCK_NONE" }
-                    ]
-                }
-            }};
-    }
-
-    async Init (plugin)
+    async init (plugin)
     {
         this.plugin = plugin;
         this.settings = plugin.settings;
+
         await this.upgrade();
+        this.bookmarkedModels = this.settings.Data.bookmarkedModels ?? [];
     }
 
     async upgrade()
@@ -47,8 +24,10 @@ class SettingsState
         while (!this.settings.Data)
             await sleep(1);
 
-        let hasChanges = false;
-        const data = this.settings.Data;
+        // DEFAULTS
+
+        const data = {...this.getDefaults(), ...this.settings.Data};        
+        let hasChanges = Object.keys(this.settings.Data).length != Object.keys(data).length;
 
         // KEYS
 
@@ -89,11 +68,15 @@ class SettingsState
         // SAVE
 
         if (hasChanges)
+        {
+            this.settings.Data = data;
             await this.save();
+        }
     }
 
     async save ()
     {
+        this.settings.Data.bookmarkedModels = this.bookmarkedModels;
         await this.settings.save();
     }
 
@@ -113,7 +96,13 @@ class SettingsState
 
     GetModels (providerId)
     {
-        return this.settings.Data[providerId + "Models"] || [];
+        const models = this.settings.Data[providerId + "Models"] || [];
+
+        for (const model of models)
+            model.getParamsKey = getParamsKey;
+
+        models.sort((a, b) => compareStrings(a.id, b.id, true));
+        return models;
     }
 
     SetModels (providerId, models)
@@ -176,11 +165,6 @@ class SettingsState
     }
 
     // MODEL PARAMS
-    
-    getParamsKey(providerId, modelId)
-    {
-        return `${providerId}//${modelId}`;
-    }
 
     setModelParams (key, params)
     {
@@ -203,11 +187,77 @@ class SettingsState
         return data.modelParams?.[key];
     }
 
+    // BOOKMARK
+
+    hasBookmarks()
+    {
+        return this.bookmarkedModels.length > 0;
+    }
+
+    hasBookmark(model)
+    {
+        return this.bookmarkedModels.some(
+            m => m.id === model.id && 
+            m.providerId === model.providerId);
+    }
+
+    addBookmark(model)
+    {
+        if (this.hasBookmark(model))
+            return;
+
+        this.bookmarkedModels.push(model);
+        this.save();
+    }
+
+    delBookmark(model)
+    {
+        if (!this.hasBookmark(model))
+            return;
+
+        this.bookmarkedModels = this.bookmarkedModels.filter(
+            m => m.id !== model.id || 
+            m.providerId !== model.providerId);
+
+        this.save();
+    }
+
     // OTHER
 
     GetRelay ()
     {
         return this.settings.Data.relay;
+    }
+
+    getDefaults()
+    {
+        return {
+            defaultModel : "gemini-flash-latest",
+            defaultProvider : "google",
+            recentModels : [],
+            
+            modelParams :
+            {
+                anthropic : { max_tokens : 4096 },
+
+                local : { reasoning_effort : "none" },
+
+                google :
+                {
+                    generationConfig : { thinkingConfig : { includeThoughts : true }},
+
+                    safetySettings : 
+                    [
+                        // https://ai.google.dev/api/generate-content#v1beta.SafetySetting
+
+                        { category : "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold : "BLOCK_NONE" },
+                        { category : "HARM_CATEGORY_DANGEROUS_CONTENT", threshold : "BLOCK_NONE" },
+                        { category : "HARM_CATEGORY_CIVIC_INTEGRITY", threshold : "BLOCK_NONE" },
+                        { category : "HARM_CATEGORY_HATE_SPEECH", threshold : "BLOCK_NONE" },
+                        { category : "HARM_CATEGORY_HARASSMENT", threshold : "BLOCK_NONE" }
+                    ]
+                }
+            }};
     }
 }
 

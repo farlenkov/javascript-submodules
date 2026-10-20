@@ -1,6 +1,5 @@
 import providers from "./Providers.js"
-import settings from '../settings/Settings.js';
-import { compareStrings } from '$lib/svelte-obsidian/src/String.js';
+import settings from '../settings/Settings.svelte.js';
 
 class Models
 {    
@@ -38,22 +37,7 @@ class Models
         {
             const provider = providers.ById[providerId];
             const models = await provider.fetchModels();            
-            models.sort((a, b) => compareStrings(a.id, b.id, true));
-
-            // models.sort((a, b) => 
-            // {
-            //     const parts1 = a.id.split("/").length;
-            //     const parts2 = b.id.split("/").length;
-
-            //     if (parts1 === 1)
-            //         return -1;
-
-            //     if (parts2 === 1)
-            //         return 1;
-
-            //     return 0;
-            // });
-
+            
             settings.SetModels(providerId, models);
             settings.save();
             this.readLocal();

@@ -41,7 +41,7 @@ export default class ModelsRequest extends ProviderRequest
             id : model.id,
             name : model.display_name || model.displayName || model.id,
             desc : model.description || model.display_name || model.displayName || model.id,
-            owner : model.owned_by || this.name,
+            owner : model.owned_by || this.provider.name,
             context : model.context_window || model.context_length || -1,
             prompt : -1,
             completion : -1 };

@@ -4,24 +4,23 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 export default class McpHost
 {
-    constructor (plugin)
+    constructor ()
+    {
+        this.serverByToolName = {};
+        this.tools = [];
+    }
+
+    async init(plugin)
     {
         this.app = plugin.app;
         this.plugin = plugin;
         this.settings = plugin.settings;
-        this.serverByToolName = {};
-        this.tools = [];
 
-        this.init();
-    }
-
-    async init()
-    {
         while (!this.settings.Data)
             await new Promise(resolve => setTimeout(resolve, 1));
 
         if (!this.settings.Data.mcpServers)
-            return;
+            this.settings.Data.mcpServers = {};
 
         const mcpServers = this.settings.Data.mcpServers;        
 
@@ -145,10 +144,10 @@ export default class McpHost
         return result;
     }
 
-    static getDefaultSettings()
-    {
-        return { mcpServers : {} };
-    }
+    // static getDefaultSettings()
+    // {
+    //     return { mcpServers : {} };
+    // }
 } 
 
 async function obsidianFetch(input, init = {}) 

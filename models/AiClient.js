@@ -1,6 +1,6 @@
 import providers from "./Providers.js"
 import models from "./Models.js"
-import settings from '../settings/Settings.js';
+import settings from '../settings/Settings.svelte.js';
 
 class AiClient
 {
@@ -9,7 +9,7 @@ class AiClient
         // GET PROVIDER
 
         const provider = providers.ById[providerId];
-        const model = provider.ModelById[modelId];
+        const model = provider?.ModelById?.[modelId];
         
         if (!provider)
             throw `[AiClient: Call] Invalid Provider ID: ${providerId}`;
@@ -19,7 +19,7 @@ class AiClient
 
         // GET PARAMS
 
-        const paramsKey = settings.getParamsKey(providerId, modelId);
+        const paramsKey = model.getParamsKey(providerId, modelId);
         const modelParams = settings.getModelParams(paramsKey) || {};
         const providerParams = settings.getModelParams(providerId) || {};
 
@@ -32,7 +32,13 @@ class AiClient
         const result = await provider.callModel(model, messages, callParams, mcp);
 
         if (!result?.text)
-            throw "API provider respond with empty message.";
+        {
+            if (!result?.think)
+                throw "API provider responds with empty message.";
+
+            result.text = result.think;
+            delete result.think;
+        }
 
         return result;
     }
