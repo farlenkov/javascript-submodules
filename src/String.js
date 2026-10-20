@@ -34,6 +34,17 @@ export function compareStrings(a, b, useLowerCase)
     return 0;
 }
 
+export function escapeHtmlAttr(value) 
+{
+    if (!value)
+        return value;
+    
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+}
+
 export function escapeXmlAttr(value) 
 {
     if (!value)

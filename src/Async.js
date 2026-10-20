@@ -1,9 +1,6 @@
 export function delay(timeout, callback)
 {
-    if (typeof timeout !== 'number')
-        timeout = 0;
-    
-    if (!timeout)
+    if (typeof timeout !== 'number' || !timeout || timeout <= 0)
         callback();
     else
         return setTimeout(callback, timeout);
@@ -11,5 +8,8 @@ export function delay(timeout, callback)
 
 export function sleep(timeout) 
 {
-    return new Promise(resolve => setTimeout(resolve, timeout));
+    if (typeof timeout !== 'number' || !timeout || timeout <= 0)
+        return Promise.resolve();
+    else
+        return new Promise(resolve => setTimeout(resolve, timeout));
 }
