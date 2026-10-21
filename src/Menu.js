@@ -117,7 +117,7 @@ export function showContextMenu(...args)
             if (item.label)     el.dom.setAttribute('aria-label', item.label); 
 
             if (item.onclick)
-                el.onClick(item.onclick);
+                el.onClick(e => item.onclick(e));
             else
                 el.setIsLabel(true);
         });
