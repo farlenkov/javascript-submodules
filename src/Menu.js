@@ -140,6 +140,30 @@ export function showContextMenu(...args)
     return menu;
 }
 
+export function showConfirmMenu (title, event, callback)
+{
+    showContextMenu
+    ([{
+        app : this.app,
+        event : event,
+        class : 'svelte-obsidian'
+    },
+    {
+        title : title,
+    },
+    {
+        title : "Yes",
+        icon : "check",
+        class : "is-warning",
+        onclick : () => callback()
+    },
+    {
+        title : "No",
+        icon : "x",
+        onclick : () => {}
+    }]);
+}
+
 function addClass(el, classNames)
 {
     classNames = classNames.trim().split(/\s+/);
